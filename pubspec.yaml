@@ -1,0 +1,65 @@
+name: clover
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 0.0.1+1
+
+environment:
+  sdk: '>=2.19.4 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  english_words: ^4.0.0
+  provider: ^6.1.2
+  animations: ^2.0.11
+  intl: ^0.19.0
+  font_awesome_flutter: ^10.8.0
+  flutter_rating_bar: ^4.0.1
+  tdesign_flutter: ^0.1.0
+  shared_preferences: ^2.3.5
+  dio: ^5.4.1
+  # pedometer: ^4.0.2
+  permission_handler: ^11.3.1
+  flutter_svg: ^2.0.17
+  flutter_local_notifications: ^18.0.1
+  fl_chart: ^0.70.1
+  flutter_localization: ^0.3.1
+  time_range_picker: ^2.3.0
+  uuid: ^4.5.1
+  table_calendar: ^3.1.3
+  flutter_ruler_picker: ^1.0.6
+  smooth_page_indicator: ^1.2.0+3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/logo.png
+    - assets/clover_heart.png
+    - assets/img/record/sleep.png
+    - assets/img/record/diet.png
+    - assets/img/record/water.png
+    - assets/img/record/walk.png
+    - assets/img/record/height.png
+    - assets/img/record/weight.png
+    - assets/img/record/pulse.png
+    - assets/img/record/mood.png
+    - assets/img/record/feeling.png
+    - assets/img/record/period.png
+    - assets/img/record/smoke.png
+    - assets/img/record/drink.png
+    - assets/img/record/disease.png
+    - assets/img/record/event.png
+    - assets/img/record/mark.png
+    - assets/img/record/sport.png
+    - assets/img/record/luck.png
+    - assets/img/home/home-record.png
+    - assets/img/default-avatar.png
