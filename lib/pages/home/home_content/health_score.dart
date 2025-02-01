@@ -62,7 +62,7 @@ class HealthScore extends StatelessWidget {
                       sectionsSpace: 0,
                       sections: _buildPieChartSections(
                         healthScore,
-                        const Color(0xff63E2D6),
+                        const Color(0xFF428B38),
                       ),
                     ),
                   ),
@@ -72,7 +72,7 @@ class HealthScore extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 24, // 调整字体大小
                         fontWeight: FontWeight.bold,
-                        color: Color(0xff63E2D6),
+                        color: Color(0xFF428B38),
                       ),
                     ),
                   ),

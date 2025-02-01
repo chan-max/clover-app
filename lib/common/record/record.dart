@@ -1,8 +1,16 @@
 List<Map<String, dynamic>> recordTypeOptions = [
   {
+    'type': 'event',
+    'label': '事件',
+    'logo': 'assets/img/record/event.png',
+  },
+  {
     'type': 'sleep',
     'label': '睡眠',
     'logo': 'assets/img/record/sleep.png',
+    'children': [
+      {'description': '你昨晚睡的怎么样'}
+    ]
   },
   {
     'type': 'mood',
@@ -70,11 +78,6 @@ List<Map<String, dynamic>> recordTypeOptions = [
     'logo': 'assets/img/record/disease.png',
   },
   {
-    'type': 'event',
-    'label': '事件',
-    'logo': 'assets/img/record/event.png',
-  },
-  {
     'type': 'mark',
     'label': '标记',
     'logo': 'assets/img/record/mark.png',
@@ -82,6 +85,11 @@ List<Map<String, dynamic>> recordTypeOptions = [
   {
     'type': 'sport',
     'label': '运动',
+    'logo': 'assets/img/record/sport.png',
+  },
+  {
+    'type': 'weather',
+    'label': '天气',
     'logo': 'assets/img/record/sport.png',
   },
 ];

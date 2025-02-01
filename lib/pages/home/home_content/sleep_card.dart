@@ -52,7 +52,7 @@ class SleepCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xff63E2D6),
+                        color: Color(0xFF428B38),
                       ),
                     ),
                   ],
@@ -111,7 +111,7 @@ class SleepCard extends StatelessWidget {
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xff63E2D6),
+                                    color: Color(0xFF428B38),
                                   ),
                                 ),
                               ],
@@ -173,7 +173,7 @@ class SleepCard extends StatelessWidget {
   List<PieChartSectionData> showingSections(double sleepPercentage) {
     return [
       PieChartSectionData(
-        color: const Color(0xff63E2D6),
+        color: const Color(0xFF428B38),
         value: sleepPercentage,
         title: '${sleepPercentage.toInt()}%',
         radius: 20, // 环形扇形更小

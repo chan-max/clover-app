@@ -49,7 +49,10 @@ class _SignInScreenState extends State<SignInScreen> {
         // 调用 login 接口
         await signin(_username, _password);
         await getUserInfo();
-        _navigateWithSlide(context, HomePage());
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()), // 替换登录页
+        );
       } catch (e) {
         // 显示错误提示
         ScaffoldMessenger.of(context).showSnackBar(

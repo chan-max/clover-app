@@ -1,4 +1,4 @@
-name: clover
+name: 四叶草
 description: A new Flutter project.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -32,12 +32,38 @@ dependencies:
   table_calendar: ^3.1.3
   flutter_ruler_picker: ^1.0.6
   smooth_page_indicator: ^1.2.0+3
+  flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^5.0.0
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: 'assets/app_icon.png' # 用于 iOS 和 Android 旧版
+  adaptive_icon_foreground: 'assets/app_icon.png' # 适应性图标前景
+  adaptive_icon_background: '#ffffff' # 背景色（可以是颜色或图片）
+
+flutter_native_splash:
+  color: "#ffffff"  # 背景色（仅用于适配特殊情况）
+  image: assets/splash.png  # 统一的启动页图片
+  android: true
+  ios: true
+  fullscreen: true  # 确保启动图全屏显示
+
+  # Android 12 适配
+  android_12:
+    color: "#ffffff"
+    image: assets/splash.png  # 仍然使用相同的 splash.png
+
+  # 让图片充满全屏
+  android_gravity: fill  # Android 让图片填充整个屏幕
+  ios_content_mode: scaleAspectFill  # iOS 让图片填充整个屏幕
+
 
 flutter:
   uses-material-design: true

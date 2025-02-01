@@ -1,5 +1,8 @@
+import 'package:clover/pages/user/signin.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // 导入 SharedPreferences
 import 'package:clover/common/api.dart'; // 假设 getUserInfo 方法已在此文件中定义
+import 'package:clover/pages/home/profile_content.dart'; // 替换成你的 SignInScreen 路径
 
 class ProfileContent extends StatefulWidget {
   @override
@@ -33,11 +36,31 @@ class _ProfileContentState extends State<ProfileContent> {
     }
   }
 
-  // 使用 didUpdateWidget，每次组件更新时触发获取用户信息
-  @override
-  void didUpdateWidget(covariant ProfileContent oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _fetchUserInfo(); // 每次组件更新时重新获取用户信息
+  // 退出登录方法
+  Future<void> _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token'); // 清除存储的 Token
+    print('Token 已清除，退出登录');
+
+    // 使用页面过渡动画进行跳转
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return SignInScreen(); // 替换为 SignInScreen
+        },
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0); // 从右边滑入
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(position: offsetAnimation, child: child); // 使用滑动过渡动画
+        },
+      ),
+    );
   }
 
   @override
@@ -113,10 +136,10 @@ class _ProfileContentState extends State<ProfileContent> {
                                 .toString()), // 确保gender是String类型
                         const Divider(thickness: 1),
                         const SizedBox(height: 24),
+                        // 编辑个人信息按钮
                         Center(
                           child: ElevatedButton.icon(
                             onPressed: () {
-                              // 编辑个人信息逻辑
                               print('编辑个人信息');
                             },
                             icon: const Icon(Icons.edit),
@@ -125,6 +148,20 @@ class _ProfileContentState extends State<ProfileContent> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 32, vertical: 12),
                               backgroundColor: const Color(0xFF00D0A9),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        // 退出登录按钮
+                        Center(
+                          child: ElevatedButton.icon(
+                            onPressed: _logout, // 绑定退出登录方法
+                            icon: const Icon(Icons.exit_to_app),
+                            label: const Text('退出登录'),
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 32, vertical: 12),
+                              backgroundColor: Colors.red, // 退出按钮颜色
                             ),
                           ),
                         ),
