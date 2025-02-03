@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // 引入 provider
-import '/common/provider.dart'; // 引入 AppDataProvider
-import '/common/record/record.dart'; // 导入 recordTypeOptions 数据结构
-import 'package:smooth_page_indicator/smooth_page_indicator.dart'; // 引入分页指示器
+import 'package:provider/provider.dart';
+import '/common/provider.dart';
+import '/common/record/record.dart';
 
-// RecordTypeBottomSheet 的状态类
 class RecordTypeBottomSheet extends StatefulWidget {
-  final Function(String) onOptionSelected; // 传递一个回调函数
+  final Function(String) onOptionSelected;
 
   const RecordTypeBottomSheet({super.key, required this.onOptionSelected});
 
@@ -15,194 +13,131 @@ class RecordTypeBottomSheet extends StatefulWidget {
 }
 
 class _RecordTypeBottomSheetState extends State<RecordTypeBottomSheet> {
-  bool isLoading = true; // 控制加载状态
-  late PageController _pageController; // 用来控制 PageView
-  int currentPage = 0; // 当前页数
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
-    _fetchDayrecord(); // 初始化时调用接口
+    _fetchDayrecord();
   }
 
-  // 从 AppDataProvider 中获取 dayrecord 数据
   void _fetchDayrecord() {
-    final dayrecord = Provider.of<AppDataProvider>(context, listen: false)
-        .getData('dayrecord');
+    final dayrecord =
+        Provider.of<AppDataProvider>(context, listen: false).getData('dayrecord');
 
-    // 如果数据存在，进行处理
-    if (dayrecord != null && dayrecord['record'] != null) {
-      setState(() {
-        isLoading = false; // 设置加载状态为 false
-      });
-    } else {
-      setState(() {
-        isLoading = false; // 如果没有数据，设置加载状态为 false
-      });
-    }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // 将数据分为两行四个元素
-    final pages = List.generate(
-      (recordTypeOptions.length / 8).ceil(),
-      (index) => recordTypeOptions.skip(index * 8).take(8).toList(),
-    );
-
     return SafeArea(
       child: GestureDetector(
         onTap: () {
-          FocusScope.of(context).unfocus(); // 点击时关闭键盘
+          FocusScope.of(context).unfocus();
         },
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-              vertical: 16.0, horizontal: 16), // 给弹窗左右添加边距
-          decoration: BoxDecoration(
-            color: Colors.grey.shade50, // 改为浅灰色的背景
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(16), // 调整圆角
-              bottomRight: Radius.circular(16),
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min, // 自适应高度
-            children: [
-              // 工具栏（可以自定义内容）
-              Container(
-                height: 50, // 工具栏的高度
-                decoration: BoxDecoration(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Scrollbar(
+            thickness: 1, // 滚动条的厚度
+            radius: const Radius.circular(4), // 圆角滚动条
+            child: SingleChildScrollView( // 包裹最外层，支持滚动
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16),
+                decoration: const BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade300,
-                      blurRadius: 6.0,
-                      spreadRadius: 1.0,
-                    ),
-                  ],
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(Icons.arrow_back_ios, size: 20, color: Colors.black),
-                      Text(
-                        '', // 工具栏标题
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: IconButton(
+                        icon: const Icon(Icons.close, color: Colors.black),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                       ),
-                      Icon(Icons.search,
-                          size: 20, color: Colors.black), // 你可以根据需要添加更多图标或按钮
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16), // 工具栏与下面内容的间距
-
-              // PageView 用于分页
-              SizedBox(
-                height: 200, // 限制最大高度为屏幕的一半，可以根据需要调整
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: pages.length, // 页数
-                  onPageChanged: (index) {
-                    setState(() {
-                      currentPage = index; // 更新当前页数
-                    });
-                  },
-                  itemBuilder: (context, pageIndex) {
-                    final page = pages[pageIndex];
-
-                    return GridView.builder(
+                    ),
+                    const SizedBox(height: 8),
+                    GridView.builder(
+                      shrinkWrap: true, // 让 GridView 自适应内容大小
                       padding: EdgeInsets.zero, // 去掉 GridView 默认的边距
-                      shrinkWrap: true, // 保持 GridView 高度自适应
-                      physics:
-                          NeverScrollableScrollPhysics(), // 禁止内部 GridView 滚动
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4, // 每行4个方块
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // 每行 2 列
                         crossAxisSpacing: 12, // 横向间距
                         mainAxisSpacing: 12, // 纵向间距
                       ),
-                      itemCount: page.length, // 当前页的元素数量
+                      itemCount: recordTypeOptions.length,
                       itemBuilder: (context, index) {
-                        final option = page[index]; // 获取当前数据项
+                        final option = recordTypeOptions[index];
 
                         return GestureDetector(
                           onTap: () {
-                            Navigator.pop(context); // 关闭底部弹窗
-                            widget.onOptionSelected(option['type']); // 调用回调函数
+                            Navigator.pop(context);
+                            widget.onOptionSelected(option['type']);
                           },
                           child: Container(
+                            height: 100, // 设置固定的高度
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 16),
                             decoration: BoxDecoration(
-                              color: Colors.white, // 设置卡片背景色为白色
-                              borderRadius: BorderRadius.circular(12), // 圆角
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.grey.shade100,
-                                  blurRadius: 6.0, // 微弱的模糊阴影
-                                  spreadRadius: .2, // 阴影扩展范围
+                                  blurRadius: 4.0,
+                                  spreadRadius: 0.5,
                                 ),
                               ],
                             ),
-                            child: IntrinsicHeight(
-                              // 使用 IntrinsicHeight 来让卡片自适应高度
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 12.0, horizontal: 12.0),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center, // 内容垂直居中
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min, // 自动调整内容高度
-                                  children: [
-                                    Image.asset(
-                                      option['logo'],
-                                      width: 24,
-                                      height: 24,
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      option['label'],
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                        color: Colors.black, // 文字颜色为黑色
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  option['logo'],
+                                  width: 32,
+                                  height: 32,
                                 ),
-                              ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        option['label'],
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        option['description'],
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                        softWrap: true, // 允许换行
+                                        overflow: TextOverflow.visible, // 不使用省略号
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         );
                       },
-                    );
-                  },
+                    ),
+                  ],
                 ),
               ),
-              // 分页圆点指示器
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: SmoothPageIndicator(
-                  controller: _pageController,
-                  count: pages.length, // 页数
-                  effect: WormEffect(
-                    dotWidth: 10,
-                    dotHeight: 10,
-                    spacing: 8,
-                    dotColor: Colors.grey.shade400, // 更加柔和的点颜色
-                    activeDotColor: Colors.green.shade500, // 更显眼的活动点颜色
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

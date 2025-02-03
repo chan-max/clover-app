@@ -3,41 +3,49 @@ List<Map<String, dynamic>> recordTypeOptions = [
     'type': 'fragment',
     'label': '碎片',
     'logo': 'assets/img/record/fragment.png',
+    'description': '记录日常的琐碎事情和片段。',
   },
   {
     'type': 'activity',
     'label': '活动',
     'logo': 'assets/img/record/activity.png',
+    'description': '记录你参加的各种活动，如会议、聚会等。',
   },
   {
     'type': 'event',
     'label': '事件',
     'logo': 'assets/img/record/event.png',
+    'description': '记录重要的生活事件，如生日、纪念日等。',
   },
   {
     'type': 'finance',
     'label': '财务',
     'logo': 'assets/img/record/finance.png',
+    'description': '记录日常的财务收支情况。',
   },
   {
     'type': 'shopping',
     'label': '购物',
     'logo': 'assets/img/record/shopping.png',
+    'description': '记录购物清单和购买的商品。',
   },
-    {
+  {
     'type': 'travel',
     'label': '旅行',
     'logo': 'assets/img/record/travel.png',
+    'description': '记录你的旅行计划和旅途回忆。',
   },
-    {
+  {
     'type': 'study',
     'label': '学习',
     'logo': 'assets/img/record/study.png',
+    'description': '记录你的学习计划、进度和心得。',
   },
   {
     'type': 'sleep',
     'label': '睡眠',
     'logo': 'assets/img/record/sleep.png',
+    'description': '记录你的睡眠时间和质量。',
     'children': [
       {'description': '你昨晚睡的怎么样'}
     ]
@@ -46,85 +54,102 @@ List<Map<String, dynamic>> recordTypeOptions = [
     'type': 'mood',
     'label': '心情',
     'logo': 'assets/img/record/mood.png',
+    'description': '记录你的每日心情变化。',
   },
   {
     'type': 'luck',
     'label': '运气',
     'logo': 'assets/img/record/luck.png',
+    'description': '记录你的幸运时刻和不幸经历。',
   },
   {
     'type': 'feeling',
     'label': '身体状态',
     'logo': 'assets/img/record/feeling.png',
+    'description': '记录你每日的身体状况和感受。',
   },
   {
     'type': 'diet',
     'label': '饮食',
     'logo': 'assets/img/record/diet.png',
+    'description': '记录你每天的饮食情况。',
   },
   {
     'type': 'water',
     'label': '饮水',
     'logo': 'assets/img/record/water.png',
+    'description': '记录你每日的饮水量。',
   },
   {
     'type': 'walk',
     'label': '步数',
     'logo': 'assets/img/record/walk.png',
+    'description': '记录你每日的步数和行走距离。',
   },
   {
     'type': 'height',
     'label': '身高',
     'logo': 'assets/img/record/height.png',
+    'description': '记录你的身高变化。',
   },
   {
     'type': 'weight',
     'label': '体重',
     'logo': 'assets/img/record/weight.png',
+    'description': '记录你的体重变化和管理情况。',
   },
   {
     'type': 'pulse',
     'label': '心率',
     'logo': 'assets/img/record/pulse.png',
+    'description': '记录你的心率变化，关注健康状况。',
   },
   {
     'type': 'period',
     'label': '生理期',
     'logo': 'assets/img/record/period.png',
+    'description': '记录生理期时间，帮助健康管理。',
   },
   {
     'type': 'smoke',
     'label': '吸烟',
     'logo': 'assets/img/record/smoke.png',
+    'description': '记录每日吸烟情况，帮助戒烟管理。',
   },
   {
     'type': 'drink',
     'label': '喝酒',
     'logo': 'assets/img/record/drink.png',
+    'description': '记录每日饮酒情况，关注健康。',
   },
   {
     'type': 'disease',
     'label': '生病',
     'logo': 'assets/img/record/disease.png',
+    'description': '记录生病情况，便于健康追踪。',
   },
   {
     'type': 'mark',
     'label': '标记',
     'logo': 'assets/img/record/mark.png',
+    'description': '用来标记特别的日子或事件。',
   },
   {
     'type': 'sport',
     'label': '运动',
     'logo': 'assets/img/record/sport.png',
+    'description': '记录你的运动类型和时长。',
   },
   {
     'type': 'weather',
     'label': '天气',
     'logo': 'assets/img/record/weather.png',
+    'description': '记录当天的天气情况。',
   },
   {
     'type': 'diary',
     'label': '日记',
     'logo': 'assets/img/record/diary.png',
+    'description': '记录你的每日生活和感想。',
   },
 ];

@@ -15,7 +15,7 @@ const bool kReleaseMode = bool.fromEnvironment('dart.vm.product');
 final String _baseUrl = kReleaseMode
     ? 'https://1s.design:4321/api' // 生产环境地址
     // : 'https://localhost:4321/api'; // 开发环境地址
-    : 'https://192.168.1.103:4321/api'; // 开发环境地址
+    : 'https://192.168.0.105:4321/api'; // 开发环境地址
 
 BaseOptions options = BaseOptions(
   baseUrl: _baseUrl,
