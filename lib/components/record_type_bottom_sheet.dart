@@ -79,7 +79,7 @@ class _RecordTypeBottomSheetState extends State<RecordTypeBottomSheet> {
                             widget.onOptionSelected(option['type']);
                           },
                           child: Container(
-                            height: 100, // 设置固定的高度
+                            height: 64, // 设置固定的高度
                             padding: const EdgeInsets.symmetric(
                                 vertical: 16, horizontal: 16),
                             decoration: BoxDecoration(
