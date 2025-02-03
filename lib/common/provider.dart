@@ -5,8 +5,9 @@ class AppDataProvider extends ChangeNotifier {
   // 用 Map 保存所有数据
   Map<String, dynamic> _data = {
     'dayrecord': {},
-    'dayrecordLatest7': []
+    'dayrecordLatest7': [],
     // 更多的数据字段
+    'userInfo': {},
   };
 
   // 获取指定数据
@@ -33,12 +34,17 @@ class AppDataProvider extends ChangeNotifier {
     notifyListeners(); // 数据更新后通知所有组件
   }
 
+  Future<void> fetchUserInfo() async {
+    var response = await getUserInfo();
+    _data['userInfo'] = response;
+    notifyListeners(); // 数据更新后通知所有组件
+  }
+
   // 初始化方法，调用各个数据的加载方法
   Future<void> init() async {
     await fetchDayRecord();
     await fetchDayRecordLatest7();
-    // 如果有其他初始化方法，可以在这里调用，例如：
-    // await fetchUserData();
+    await fetchUserInfo();
     // await fetchSettings();
   }
 }

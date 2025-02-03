@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import './signin.dart'; // 导入登录页面
 import 'package:clover/common/api.dart'; // 导入API封装
-import 'package:shared_preferences/shared_preferences.dart'; // 用于存储和管理token
+// 用于存储和管理token
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({super.key});

@@ -8,11 +8,11 @@ class PeriodCalendar extends StatelessWidget {
   final ValueChanged<DateTime> onDaySelected;
 
   const PeriodCalendar({
-    Key? key,
+    super.key,
     required this.selectedDay,
     required this.focusedDay,
     required this.onDaySelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

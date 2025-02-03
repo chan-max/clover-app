@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // 用于本地存储
 import './pages/user/signin.dart'; // 导入登录页面
 import './pages/home.dart'; // 导入首页
-import 'dart:io';
 import 'package:clover/common/api.dart';
-import 'pages/home/record/sleep/record.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:provider/provider.dart';

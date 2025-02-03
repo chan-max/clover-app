@@ -2,7 +2,7 @@ import 'package:clover/pages/user/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // 导入 SharedPreferences
 import 'package:clover/common/api.dart'; // 假设 getUserInfo 方法已在此文件中定义
-import 'package:clover/pages/home/profile_content.dart'; // 替换成你的 SignInScreen 路径
+// 替换成你的 SignInScreen 路径
 
 class ProfileContent extends StatefulWidget {
   @override
@@ -27,7 +27,6 @@ class _ProfileContentState extends State<ProfileContent> {
         userInfo = res;
         isLoading = false; // 数据加载完成，更新状态
       });
-      print('用户信息: $res');
     } catch (e) {
       setState(() {
         isLoading = false; // 即使发生错误，也结束加载状态
@@ -54,10 +53,12 @@ class _ProfileContentState extends State<ProfileContent> {
           const end = Offset.zero;
           const curve = Curves.easeInOut;
 
-          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
           var offsetAnimation = animation.drive(tween);
 
-          return SlideTransition(position: offsetAnimation, child: child); // 使用滑动过渡动画
+          return SlideTransition(
+              position: offsetAnimation, child: child); // 使用滑动过渡动画
         },
       ),
     );
@@ -96,9 +97,12 @@ class _ProfileContentState extends State<ProfileContent> {
                             children: [
                               CircleAvatar(
                                 radius: 50,
-                                backgroundImage: userInfo != null && userInfo['avatar'] != null
+                                backgroundImage: userInfo != null &&
+                                        userInfo['avatar'] != null
                                     ? NetworkImage(userInfo['avatar']) // 动态加载头像
-                                    : AssetImage('assets/img/default-avatar.png') as ImageProvider, // 使用默认头像
+                                    : AssetImage(
+                                            'assets/img/default-avatar.png')
+                                        as ImageProvider, // 使用默认头像
                               ),
                               const SizedBox(height: 8),
                               Text(
@@ -123,7 +127,8 @@ class _ProfileContentState extends State<ProfileContent> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Divider(thickness: 1),
-                        _buildInfoRow('账号', userInfo?['username'] ?? '未知'), // 显示账号信息
+                        _buildInfoRow(
+                            '账号', userInfo?['username'] ?? '未知'), // 显示账号信息
                         const Divider(thickness: 1),
                         _buildInfoRow(
                             '联系方式',

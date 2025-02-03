@@ -1,4 +1,4 @@
-name: 四叶草
+name: clover
 description: A new Flutter project.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -49,21 +49,20 @@ flutter_icons:
   adaptive_icon_background: '#ffffff' # 背景色（可以是颜色或图片）
 
 flutter_native_splash:
-  color: "#ffffff"  # 背景色（仅用于适配特殊情况）
-  image: assets/splash.png  # 统一的启动页图片
+  color: '#ffffff' # 背景色（仅用于适配特殊情况）
+  image: assets/splash.png # 统一的启动页图片
   android: true
   ios: true
-  fullscreen: true  # 确保启动图全屏显示
+  fullscreen: true # 确保启动图全屏显示
 
   # Android 12 适配
   android_12:
-    color: "#ffffff"
-    image: assets/splash.png  # 仍然使用相同的 splash.png
+    color: '#ffffff'
+    image: assets/splash.png # 仍然使用相同的 splash.png
 
   # 让图片充满全屏
-  android_gravity: fill  # Android 让图片填充整个屏幕
-  ios_content_mode: scaleAspectFill  # iOS 让图片填充整个屏幕
-
+  android_gravity: fill # Android 让图片填充整个屏幕
+  ios_content_mode: scaleAspectFill # iOS 让图片填充整个屏幕
 
 flutter:
   uses-material-design: true
@@ -87,5 +86,13 @@ flutter:
     - assets/img/record/mark.png
     - assets/img/record/sport.png
     - assets/img/record/luck.png
+    - assets/img/record/weather.png
+    - assets/img/record/diary.png
+    - assets/img/record/activity.png
+    - assets/img/record/fragment.png
+    - assets/img/record/finance.png
+    - assets/img/record/shopping.png
+    - assets/img/record/travel.png
+    - assets/img/record/study.png
     - assets/img/home/home-record.png
     - assets/img/default-avatar.png

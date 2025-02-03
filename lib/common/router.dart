@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:clover/pages/home/record/sleep/record.dart';
-import 'package:clover/pages/home.dart'; // 导入首页
-import 'package:clover/pages/user/signin.dart'; // 导入登录页面
+// 导入首页
+// 导入登录页面
 import 'package:clover/pages/home/record/period/record.dart';
 import 'package:clover/pages/home/record/mood/record.dart';
 import 'package:clover/pages/home/record/feeling/record.dart';

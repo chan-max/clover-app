@@ -28,8 +28,9 @@ class _RecordTypeBottomSheetState extends State<RecordTypeBottomSheet> {
 
   // 从 AppDataProvider 中获取 dayrecord 数据
   void _fetchDayrecord() {
-    final dayrecord = Provider.of<AppDataProvider>(context, listen: false).getData('dayrecord');
-    
+    final dayrecord = Provider.of<AppDataProvider>(context, listen: false)
+        .getData('dayrecord');
+
     // 如果数据存在，进行处理
     if (dayrecord != null && dayrecord['record'] != null) {
       setState(() {
@@ -56,7 +57,8 @@ class _RecordTypeBottomSheetState extends State<RecordTypeBottomSheet> {
           FocusScope.of(context).unfocus(); // 点击时关闭键盘
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16), // 给弹窗左右添加边距
+          padding: const EdgeInsets.symmetric(
+              vertical: 16.0, horizontal: 16), // 给弹窗左右添加边距
           decoration: BoxDecoration(
             color: Colors.grey.shade50, // 改为浅灰色的背景
             borderRadius: BorderRadius.only(
@@ -88,20 +90,21 @@ class _RecordTypeBottomSheetState extends State<RecordTypeBottomSheet> {
                     children: [
                       Icon(Icons.arrow_back_ios, size: 20, color: Colors.black),
                       Text(
-                        'Select Record Type', // 工具栏标题
+                        '', // 工具栏标题
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
                       ),
-                      Icon(Icons.search, size: 20, color: Colors.black), // 你可以根据需要添加更多图标或按钮
+                      Icon(Icons.search,
+                          size: 20, color: Colors.black), // 你可以根据需要添加更多图标或按钮
                     ],
                   ),
                 ),
               ),
               const SizedBox(height: 16), // 工具栏与下面内容的间距
-              
+
               // PageView 用于分页
               SizedBox(
                 height: 200, // 限制最大高度为屏幕的一半，可以根据需要调整
@@ -119,7 +122,8 @@ class _RecordTypeBottomSheetState extends State<RecordTypeBottomSheet> {
                     return GridView.builder(
                       padding: EdgeInsets.zero, // 去掉 GridView 默认的边距
                       shrinkWrap: true, // 保持 GridView 高度自适应
-                      physics: NeverScrollableScrollPhysics(), // 禁止内部 GridView 滚动
+                      physics:
+                          NeverScrollableScrollPhysics(), // 禁止内部 GridView 滚动
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 4, // 每行4个方块
                         crossAxisSpacing: 12, // 横向间距
@@ -140,17 +144,20 @@ class _RecordTypeBottomSheetState extends State<RecordTypeBottomSheet> {
                               borderRadius: BorderRadius.circular(12), // 圆角
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.grey.shade200,
+                                  color: Colors.grey.shade100,
                                   blurRadius: 6.0, // 微弱的模糊阴影
-                                  spreadRadius: 1.0, // 阴影扩展范围
+                                  spreadRadius: .2, // 阴影扩展范围
                                 ),
                               ],
                             ),
-                            child: IntrinsicHeight( // 使用 IntrinsicHeight 来让卡片自适应高度
+                            child: IntrinsicHeight(
+                              // 使用 IntrinsicHeight 来让卡片自适应高度
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 12.0, horizontal: 12.0),
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center, // 内容垂直居中
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.center, // 内容垂直居中
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisSize: MainAxisSize.min, // 自动调整内容高度
                                   children: [

@@ -1,8 +1,38 @@
 List<Map<String, dynamic>> recordTypeOptions = [
   {
+    'type': 'fragment',
+    'label': '碎片',
+    'logo': 'assets/img/record/fragment.png',
+  },
+  {
+    'type': 'activity',
+    'label': '活动',
+    'logo': 'assets/img/record/activity.png',
+  },
+  {
     'type': 'event',
     'label': '事件',
     'logo': 'assets/img/record/event.png',
+  },
+  {
+    'type': 'finance',
+    'label': '财务',
+    'logo': 'assets/img/record/finance.png',
+  },
+  {
+    'type': 'shopping',
+    'label': '购物',
+    'logo': 'assets/img/record/shopping.png',
+  },
+    {
+    'type': 'travel',
+    'label': '旅行',
+    'logo': 'assets/img/record/travel.png',
+  },
+    {
+    'type': 'study',
+    'label': '学习',
+    'logo': 'assets/img/record/study.png',
   },
   {
     'type': 'sleep',
@@ -90,6 +120,11 @@ List<Map<String, dynamic>> recordTypeOptions = [
   {
     'type': 'weather',
     'label': '天气',
-    'logo': 'assets/img/record/sport.png',
+    'logo': 'assets/img/record/weather.png',
+  },
+  {
+    'type': 'diary',
+    'label': '日记',
+    'logo': 'assets/img/record/diary.png',
   },
 ];

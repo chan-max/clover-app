@@ -122,13 +122,13 @@ class DioHttp {
     ));
 
     // 配置 HttpClientAdapter 以忽略 SSL 证书验证
-    (_dio.httpClientAdapter as dynamic).onHttpClientCreate = (client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) {
-        // 忽略证书验证
-        return true;
-      };
-    };
+    // (_dio.httpClientAdapter as dynamic).onHttpClientCreate = (client) {
+    //   client.badCertificateCallback =
+    //       (X509Certificate cert, String host, int port) {
+    //     // 忽略证书验证
+    //     return true;
+    //   };
+    // };
   }
 
   // GET 请求
@@ -242,7 +242,7 @@ Future<void> addDayRecordDetail(String? date, Map<String, dynamic> post) async {
 
     return response['data'];
   } catch (e) {
-    throw new Exception(e);
+    throw Exception(e);
   }
 }
 

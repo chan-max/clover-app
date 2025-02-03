@@ -130,7 +130,7 @@ class SleepCard extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  '${suggestedSleepDuration}小时',
+                                  '$suggestedSleepDuration小时',
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clover/pages/user/signin.dart';
-import 'package:clover/pages/home/home_content/home_content.dart';
 import 'package:clover/pages/home/profile_content.dart';
 import 'package:clover/pages/home/settings_content.dart';
 import 'package:clover/pages/home/statistics_content.dart';
 import 'package:clover/pages/home/notifications_content.dart';
-import '/components/record_type_bottom_sheet.dart'; // 导入新创建的组件
+// 导入新创建的组件
 import 'package:provider/provider.dart';
 import '/pages/home/today//today_content.dart';
 import '/common/provider.dart'; // 导入你的 AppDataProvider
