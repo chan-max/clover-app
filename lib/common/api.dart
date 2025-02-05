@@ -11,11 +11,12 @@ import 'package:uuid/uuid.dart';
 // 定义一个全局的 NavigatorKey
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-const bool kReleaseMode = bool.fromEnvironment('dart.vm.product');
+const bool kReleaseMode = bool.fromEnvironment('dart.vm.product') ?? true;
 final String _baseUrl = kReleaseMode
     ? 'https://1s.design:4321/api' // 生产环境地址
     // : 'https://localhost:4321/api'; // 开发环境地址
-    : 'https://192.168.0.105:4321/api'; // 开发环境地址
+    : 'https://192.168.31.61:4321/api'; // 开发环境地址
+    // : 'https://1s.design:4321/api'; // 开发环境地址
 
 BaseOptions options = BaseOptions(
   baseUrl: _baseUrl,
@@ -63,7 +64,8 @@ class DioHttp {
         print("结束请求拦截触发");
         print('Response Status Code: ${response.statusCode}');
 
-        if (response.statusCode == 401 ?? response.data['code'] == 401) {
+        if (response.statusCode == 401 ||
+            (response.data != null && response.data['code'] == 401)) {
           print("用户身份过期，跳转到登录页面");
           // 清除本地 token
           final prefs = await SharedPreferences.getInstance();

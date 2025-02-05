@@ -85,7 +85,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   SizedBox(height: constraints.maxHeight * 0.1),
                   Text(
-                    "开启你的健康人生",
+                    "登录四叶草",
                     style: Theme.of(context)
                         .textTheme
                         .headlineSmall!

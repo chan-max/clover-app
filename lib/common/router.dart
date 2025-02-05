@@ -8,10 +8,17 @@ import 'package:clover/pages/home/record/feeling/record.dart';
 import 'package:clover/pages/home/record/height/record.dart';
 import 'package:clover/pages/home/record/height/height_analyze.dart';
 import 'package:clover/pages/home/record/weight/record.dart';
+import 'package:clover/pages/home/record/diary/record.dart';
+import 'package:clover/pages/home/record/fragment/record.dart';
+import 'package:clover/pages/home/record/diet/record.dart';
+
 // 所有页面路由管理
 class AppRoutes {
   static Map<String, WidgetBuilder> getRoutes() {
     return {
+      'fragmentRecord': (context) => FragmentRecordPage(),
+      'diaryRecord': (context) => DiaryRecordPage(),
+      'dietRecord': (context) => DietRecordPage(),
       'sleepRecord': (context) => SleepRecordPage(),
       'periodRecord': (context) => PeriodRecordPage(),
       'moodRecord': (context) => MoodRecordPage(),

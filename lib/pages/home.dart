@@ -95,12 +95,12 @@ class _HomePageState extends State<HomePage> {
               label: '记录今天',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.view_list_rounded),
-              label: '功能',
-            ),
-            BottomNavigationBarItem(
               icon: Icon(Icons.shopping_cart),
               label: '通知',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_month),
+              label: '回忆过去',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings),
