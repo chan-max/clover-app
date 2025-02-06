@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // 用于格式化日期
 import 'package:provider/provider.dart'; // 引入 provider
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '/common/provider.dart';
 import '/common/api.dart';
 
@@ -12,6 +13,7 @@ class FragmentRecordPage extends StatefulWidget {
 class _FragmentRecordPageState extends State<FragmentRecordPage> {
   late DateTime _selectedDay;
   TextEditingController _contentController = TextEditingController();
+  bool _isBottomSheetVisible = false;
 
   @override
   void initState() {
@@ -41,9 +43,10 @@ class _FragmentRecordPageState extends State<FragmentRecordPage> {
     // 添加新的碎片记录到 provider
     Provider.of<AppDataProvider>(context, listen: false).fetchDayRecord();
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('碎片保存成功')),
-    );
+    TDToast.showText('碎片保存成功', context: context);
+
+    // 关闭弹出层
+    Navigator.pop(context);
   }
 
   // 删除碎片记录
@@ -71,6 +74,73 @@ class _FragmentRecordPageState extends State<FragmentRecordPage> {
     }
   }
 
+  // 显示输入框的弹出层
+  void _showTextInputDialog() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '请输入碎片内容',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 12),
+              TextField(
+                controller: _contentController,
+                maxLines: 5,
+                decoration: InputDecoration(
+                  hintText: '请输入内容...',
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.blueAccent),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _saveFragment,
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, 48),
+                  backgroundColor: Colors.blueAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text('确定', style: TextStyle(fontSize: 16)),
+              ),
+              SizedBox(height: 12),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // 处理照片记录点击
+  void _onPhotoRecordClicked() {
+    // 处理照片记录
+    print("照片记录按钮点击");
+  }
+
+  // 处理视频记录点击
+  void _onVideoRecordClicked() {
+    // 处理视频记录
+    print("视频记录按钮点击");
+  }
+
+  // 处理语音记录点击
+  void _onVoiceRecordClicked() {
+    // 处理语音记录
+    print("语音记录按钮点击");
+  }
+
   @override
   Widget build(BuildContext context) {
     var dayRecord = Provider.of<AppDataProvider>(context).getData('dayrecord');
@@ -78,16 +148,18 @@ class _FragmentRecordPageState extends State<FragmentRecordPage> {
     List<Map<String, dynamic>> fragmentRecords = [];
     if (dayRecord['record'] != null) {
       fragmentRecords = List<Map<String, dynamic>>.from(
-        dayRecord['record']?.where((record) => record['type'] == 'fragment') ?? [],
+        dayRecord['record']?.where((record) => record['type'] == 'fragment') ??
+            [],
       );
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         titleTextStyle:
             const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        title: const Text('记录碎片'),
+        title: const Text('记录生活碎片'),
         iconTheme: const IconThemeData(color: Colors.grey),
         leading: IconButton(
           icon: const Icon(
@@ -105,64 +177,91 @@ class _FragmentRecordPageState extends State<FragmentRecordPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              // 碎片记录表单部分
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 12,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
+              // 上方插图，增大尺寸
+              Center(
+                child: Image.asset(
+                  'assets/img/ill/fragment_banner.png', // 插图图片路径
+                  height: 200, // 增大插图高度
+                  width: 200, // 增大插图宽度
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '记录 ${DateFormat('yyyy-MM-dd').format(_selectedDay)}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.blueAccent,
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    Text('碎片内容：', style: TextStyle(color: Colors.blueAccent)),
-                    TextField(
-                      controller: _contentController,
-                      maxLines: 10,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white, // 设置背景色为白色
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueAccent),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        hintText: '请输入碎片内容',
-                        hintStyle: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    // 保存碎片按钮
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
-                        minimumSize: Size(double.infinity, 48),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      onPressed: _saveFragment,
-                      child: Text(
-                        '保存碎片',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                    ),
-                  ],
+              ),
+              SizedBox(height: 4),
+              // 文字描述使用非常小的文字
+              Text(
+                '记录生活中的每一小片刻，留下那些重要又微小的瞬间。',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12, // 使用非常小的文字
+                  color: Colors.grey[400],
+                  fontWeight: FontWeight.w300, // 更轻的字体
+                ),
+              ),
+              SizedBox(height: 20),
+              // 文字记录按钮
+              ElevatedButton.icon(
+                onPressed: _showTextInputDialog,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  minimumSize: Size(double.infinity, 48),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                icon: Icon(Icons.font_download, color: Colors.white),
+                label: Text(
+                  '文字记录',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+              SizedBox(height: 20),
+              // 新增按钮：照片记录
+              ElevatedButton.icon(
+                onPressed: _onPhotoRecordClicked,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  minimumSize: Size(double.infinity, 48),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                icon: Icon(Icons.photo, color: Colors.white),
+                label: Text(
+                  '照片记录',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+              SizedBox(height: 20),
+              // 新增按钮：视频记录
+              ElevatedButton.icon(
+                onPressed: _onVideoRecordClicked,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.purple,
+                  minimumSize: Size(double.infinity, 48),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                icon: Icon(Icons.video_camera_back, color: Colors.white),
+                label: Text(
+                  '视频记录',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+              SizedBox(height: 20),
+              // 新增按钮：语音记录
+              ElevatedButton.icon(
+                onPressed: _onVoiceRecordClicked,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  minimumSize: Size(double.infinity, 48),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                icon: Icon(Icons.mic, color: Colors.white),
+                label: Text(
+                  '语音记录',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
               SizedBox(height: 20),
@@ -192,7 +291,8 @@ class _FragmentRecordPageState extends State<FragmentRecordPage> {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '内容：${record['content'] ?? '无内容'}',

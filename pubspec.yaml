@@ -67,6 +67,7 @@ flutter_native_splash:
 flutter:
   uses-material-design: true
   assets:
+    - assets/img/
     - assets/logo.png
     - assets/clover_heart.png
     - assets/img/record/sleep.png
@@ -94,5 +95,7 @@ flutter:
     - assets/img/record/shopping.png
     - assets/img/record/travel.png
     - assets/img/record/study.png
+    - assets/img/record/anniversary.png
+    - assets/img/ill/fragment_banner.png
     - assets/img/home/home-record.png
     - assets/img/default-avatar.png

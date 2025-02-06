@@ -1,13 +1,13 @@
 List<Map<String, dynamic>> recordTypeOptions = [
   {
     'type': 'fragment',
-    'label': '碎片',
+    'label': '生活碎片',
     'logo': 'assets/img/record/fragment.png',
     'description': '记录日常的琐碎事情和片段。',
   },
   {
     'type': 'activity',
-    'label': '活动',
+    'label': '日常活动',
     'logo': 'assets/img/record/activity.png',
     'description': '记录你参加的各种活动，如会议、聚会等。',
   },
@@ -151,5 +151,11 @@ List<Map<String, dynamic>> recordTypeOptions = [
     'label': '日记',
     'logo': 'assets/img/record/diary.png',
     'description': '记录你的每日生活和感想。',
+  },
+  {
+    'type': 'anniversary',
+    'label': '纪念日',
+    'logo': 'assets/img/record/anniversary.png',
+    'description': '可能是某个值得纪念的日期',
   },
 ];

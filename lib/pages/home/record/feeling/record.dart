@@ -106,169 +106,101 @@ class _FeelingRecordPageState extends State<FeelingRecordPage> {
           },
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              // 记录表单部分
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 12,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '记录 ${DateFormat('yyyy-MM-dd').format(_selectedDay)}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.blueAccent,
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    _buildSlider(
-                      label: '身体状态：${_feelingRate.toInt()}（1: 非常差, 5: 非常好）',
-                      value: _feelingRate,
-                      onChanged: (value) {
-                        setState(() {
-                          _feelingRate = value;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 16),
-                    _buildSlider(
-                      label: '能量：${_energyRate.toInt()}（1: 极低, 5: 极高）',
-                      value: _energyRate,
-                      onChanged: (value) {
-                        setState(() {
-                          _energyRate = value;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 16),
-                    Text('描述：', style: TextStyle(color: Colors.blueAccent)),
-                    TextField(
-                      controller: _descriptionController,
-                      maxLines: 5,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white, // 设置背景色为白色
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blueAccent),
-                          borderRadius: BorderRadius.circular(12),
+      body: Column(
+        children: [
+          // 记录表单部分
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 12,
+                          offset: Offset(0, 4),
                         ),
-                        hintText: '请输入身体状态描述（如开心、疲倦等）',
-                        hintStyle: TextStyle(color: Colors.grey),
-                      ),
+                      ],
                     ),
-                    SizedBox(height: 20),
-                    // 保存记录按钮
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
-                        minimumSize: Size(double.infinity, 48),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '记录 ${DateFormat('yyyy-MM-dd').format(_selectedDay)}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.blueAccent,
+                          ),
                         ),
-                      ),
-                      onPressed: _saveRecord,
-                      child: Text(
-                        '保存记录',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-              // 记录列表
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: feelingRecords.isEmpty
-                    ? Text('今日未记录', style: TextStyle(color: Colors.grey))
-                    : Column(
-                        children: feelingRecords.map((record) {
-                          return Container(
-                            margin: EdgeInsets.only(bottom: 12),
-                            padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Colors.blue[50],
+                        SizedBox(height: 16),
+                        _buildSlider(
+                          label: '身体状态：${_feelingRate.toInt()}（1: 非常差, 5: 非常好）',
+                          value: _feelingRate,
+                          onChanged: (value) {
+                            setState(() {
+                              _feelingRate = value;
+                            });
+                          },
+                        ),
+                        SizedBox(height: 16),
+                        _buildSlider(
+                          label: '能量：${_energyRate.toInt()}（1: 极低, 5: 极高）',
+                          value: _energyRate,
+                          onChanged: (value) {
+                            setState(() {
+                              _energyRate = value;
+                            });
+                          },
+                        ),
+                        SizedBox(height: 16),
+                        Text('描述：', style: TextStyle(color: Colors.blueAccent)),
+                        TextField(
+                          controller: _descriptionController,
+                          maxLines: 5,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white, // 设置背景色为白色
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueAccent),
                               borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.shade300,
-                                  blurRadius: 8,
-                                  offset: Offset(0, 4),
-                                ),
-                              ],
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '身体状态：${record['feelingRate']}（${record['feelingRate'] == 1 ? "非常差" : record['feelingRate'] == 5 ? "非常好" : "一般"}）',
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                    Text(
-                                      '能量：${record['energyRate']}（${record['energyRate'] == 1 ? "极低" : record['energyRate'] == 5 ? "极高" : "一般"}）',
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                    Text(
-                                      '描述：${record['description'] ?? '无详情'}',
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                  ],
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.delete, color: Colors.red),
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        title: Text('确认删除'),
-                                        content: Text('你确定要删除这条记录吗？'),
-                                        actions: [
-                                          TextButton(
-                                            child: Text('取消'),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                          TextButton(
-                                            child: Text('删除'),
-                                            onPressed: () {
-                                              _deleteRecord(record['id']);
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                      ),
+                            hintText: '请输入身体状态描述（如开心、疲倦等）',
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+          // 固定按钮在底部
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                minimumSize: Size(double.infinity, 48),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24), // 最大圆角（按钮圆角）
+                ),
+              ),
+              onPressed: _saveRecord,
+              child: Text(
+                '保存记录',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

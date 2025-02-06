@@ -192,7 +192,8 @@ class _DietRecordPageState extends State<DietRecordPage> {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '内容：${record['content'] ?? '无内容'}',
