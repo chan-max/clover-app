@@ -2,6 +2,9 @@ flutter pub run flutter_launcher_icons:main
 
 flutter pub run flutter_native_splash:create
 
+游览器的方式运行flutter
+flutter run -d chrome --web-hostname=0.0.0.0 --web-port=8000 
+
 # 随手的记录会成为未来的珍贵记忆
 
 # 四叶草 - 每一天都值得被记住
@@ -11,6 +14,7 @@ flutter pub run flutter_native_splash:create
 # 当岁月流逝，到了生命的尽头，你将什么都带不走，除了那份美好而温馨的回忆
 # 通过随便的记忆
 
+# 除了每一条详细的记录，每一点都有一个独立的标题，独立的描述，独立的内容，独立的颜色
 
 # feature 
  - 去年今天都做了什么

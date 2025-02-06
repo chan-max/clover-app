@@ -12,6 +12,7 @@ class DietRecordPage extends StatefulWidget {
 class _DietRecordPageState extends State<DietRecordPage> {
   late DateTime _selectedDay;
   TextEditingController _contentController = TextEditingController();
+  String _dietStatus = '正常';
 
   @override
   void initState() {
@@ -34,6 +35,7 @@ class _DietRecordPageState extends State<DietRecordPage> {
     Map<String, dynamic> dietRecord = {
       'type': 'diet',
       'content': content,
+      'status': _dietStatus,
     };
 
     await addDayRecordDetail(null, dietRecord);
@@ -44,6 +46,13 @@ class _DietRecordPageState extends State<DietRecordPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('饮食记录保存成功')),
     );
+
+    _contentController.clear();
+    setState(() {
+      _dietStatus = '正常';
+    });
+
+    Navigator.pop(context);
   }
 
   // 删除饮食记录
@@ -69,6 +78,87 @@ class _DietRecordPageState extends State<DietRecordPage> {
         SnackBar(content: Text('删除失败: $e')),
       );
     }
+  }
+
+  // 显示记录饮食的弹层
+  void _showRecordDialog() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+      ),
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+          top: 20,
+          left: 20,
+          right: 20,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '记录 ${DateFormat('yyyy-MM-dd').format(_selectedDay)}',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: Colors.greenAccent,
+              ),
+            ),
+            SizedBox(height: 16),
+            Text('饮食内容：', style: TextStyle(color: Colors.greenAccent)),
+            TextField(
+              controller: _contentController,
+              maxLines: 4,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white, // 设置背景色为白色
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.greenAccent),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                hintText: '请输入饮食内容',
+                hintStyle: TextStyle(color: Colors.grey),
+              ),
+            ),
+            SizedBox(height: 16),
+            Text('饮食状态：', style: TextStyle(color: Colors.greenAccent)),
+            DropdownButton<String>(
+              value: _dietStatus,
+              items: ['正常', '过多', '过少'].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (newValue) {
+                setState(() {
+                  _dietStatus = newValue!;
+                });
+              },
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.greenAccent,
+                minimumSize: Size(double.infinity, 48),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              onPressed: _saveDiet,
+              child: Text(
+                '保存饮食',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
+            SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -105,67 +195,6 @@ class _DietRecordPageState extends State<DietRecordPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              // 饮食记录表单部分
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 12,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '记录 ${DateFormat('yyyy-MM-dd').format(_selectedDay)}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.greenAccent,
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    Text('饮食内容：', style: TextStyle(color: Colors.greenAccent)),
-                    TextField(
-                      controller: _contentController,
-                      maxLines: 10,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white, // 设置背景色为白色
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.greenAccent),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        hintText: '请输入饮食内容',
-                        hintStyle: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    // 保存饮食按钮
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.greenAccent,
-                        minimumSize: Size(double.infinity, 48),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      onPressed: _saveDiet,
-                      child: Text(
-                        '保存饮食',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
               // 饮食记录列表
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 10),
@@ -197,6 +226,10 @@ class _DietRecordPageState extends State<DietRecordPage> {
                                     children: [
                                       Text(
                                         '内容：${record['content'] ?? '无内容'}',
+                                        style: TextStyle(fontSize: 14),
+                                      ),
+                                      Text(
+                                        '状态：${record['status'] ?? '未知'}',
                                         style: TextStyle(fontSize: 14),
                                       ),
                                     ],
@@ -234,6 +267,21 @@ class _DietRecordPageState extends State<DietRecordPage> {
                           );
                         }).toList(),
                       ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.greenAccent,
+                  minimumSize: Size(double.infinity, 48),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onPressed: _showRecordDialog,
+                child: Text(
+                  '添加饮食记录',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
               ),
             ],
           ),

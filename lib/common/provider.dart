@@ -24,7 +24,7 @@ class AppDataProvider extends ChangeNotifier {
   // 模拟从 API 获取数据（例如获取 dayrecord）
   Future<void> fetchDayRecord() async {
     var response = await getDayrecord();
-    _data['dayrecord'] = response['data'];
+    _data['dayrecord'] = response;
     notifyListeners(); // 数据更新后通知所有组件
   }
 

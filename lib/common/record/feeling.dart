@@ -15,6 +15,7 @@ class FeelingConfig {
         {'type': 'refreshed', 'name': '神清气爽'},
       ],
     },
+    
     {
       'category': '不适', // 不适感受
       'children': [

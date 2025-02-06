@@ -11,11 +11,14 @@ import 'package:clover/pages/home/record/weight/record.dart';
 import 'package:clover/pages/home/record/diary/record.dart';
 import 'package:clover/pages/home/record/fragment/record.dart';
 import 'package:clover/pages/home/record/diet/record.dart';
-
+import 'package:clover/pages/home/record/anniversary/record.dart';
+import 'package:clover/pages/home/record/finance/record.dart';
 // 所有页面路由管理
 class AppRoutes {
   static Map<String, WidgetBuilder> getRoutes() {
     return {
+      'financeRecord': (context) => FinancePage(),
+      'anniversaryRecord': (context) => AnniversaryRecordPage(),
       'fragmentRecord': (context) => FragmentRecordPage(),
       'diaryRecord': (context) => DiaryRecordPage(),
       'dietRecord': (context) => DietRecordPage(),

@@ -27,7 +27,7 @@ class _HomeContentState extends State<HomeContent> {
     try {
       final res = await getDayrecord(); // 调用接口获取数据
       setState(() {
-        dayrecord = res['data']; // 更新 dayrecord 数据
+        dayrecord = res; // 更新 dayrecord 数据
         isLoading = false; // 设置为加载完成
       });
     } catch (e) {

@@ -4,6 +4,7 @@ import 'package:clover/pages/user/signin.dart';
 import 'package:clover/pages/home/profile_content.dart';
 import 'package:clover/pages/home/settings_content.dart';
 import 'package:clover/pages/home/statistics_content.dart';
+import 'package:clover/pages/home/calendar/calendar.dart';
 import 'package:clover/pages/home/notifications_content.dart';
 // 导入新创建的组件
 import 'package:provider/provider.dart';
@@ -21,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   // 页面列表，部分页面显示自定义导航栏
   final List<Widget> _pages = [
     TodayContent(), // 不显示导航栏
-    StatisticsContent(), // 不包含导航栏
+    DayRecordPage(), // 不包含导航栏
     NotificationsContent(), // 不包含导航栏
     SettingsContent(), // 不包含导航栏
     ProfileContent(), // 不包含导航栏

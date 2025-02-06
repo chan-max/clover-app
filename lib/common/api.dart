@@ -13,10 +13,11 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 const bool kReleaseMode = bool.fromEnvironment('dart.vm.product') ?? true;
 final String _baseUrl = kReleaseMode
-    ? 'https://1s.design:4321/api' // 生产环境地址
-    : 'https://localhost:4321/api'; // 开发环境地址
-    // : 'https://192.168.31.61:4321/api'; // 开发环境地址
-    // : 'https://1s.design:4321/api'; // 开发环境地址
+    ? 'https://1s.design:4321/api' // 生产环境地址 线上
+    // : 'https://localhost:4321/api'; // 开发环境地址 本地
+    // : 'https://172.20.10.10:4321/api'; // 开发环境地址 本地
+    : 'https://192.168.31.61:4321/api'; // 开发环境地址 wifi
+// : 'https://1s.design:4321/api'; // 开发环境地址
 
 BaseOptions options = BaseOptions(
   baseUrl: _baseUrl,
@@ -212,7 +213,7 @@ dynamic getDayrecord({String? datekey}) async {
     url += '/$datekey';
   }
   var res = await dioHttp.get(url);
-  return res;
+  return res['data'];
 }
 
 // 获取我的个人分析数据
