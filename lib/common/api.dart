@@ -206,6 +206,12 @@ dynamic getUserInfo() async {
   return res['data'];
 }
 
+dynamic updateUserInfo(Map<String, dynamic> updatedUserInfo) async {
+  var res =
+      await dioHttp.post('/user/update', data: updatedUserInfo); // 替换为你的 API 地址
+  return true;
+}
+
 // 获取 dayrecord 方法
 dynamic getDayrecord({String? datekey}) async {
   String url = '/dayrecord';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // 用于格式化日期
-import 'package:provider/provider.dart'; // 引入 provider
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '/components/record_type_bottom_sheet.dart';
-import '/common/provider.dart'; // 假设你已经创建了这个Provider类
-import '/common/api.dart'; // 假设你已经创建了这个API类
+import '/common/provider.dart';
+import '/common/api.dart';
 
 class TodayContent extends StatelessWidget {
   Future<Map<String, dynamic>> _getUserInfo(BuildContext context) async {
@@ -13,7 +13,6 @@ class TodayContent extends StatelessWidget {
     return userInfo ?? {};
   }
 
-  // 删除记录
   void _deleteRecord(BuildContext context, String recordId) async {
     var dayRecord = Provider.of<AppDataProvider>(context, listen: false)
         .getData('dayrecord');
@@ -40,186 +39,226 @@ class TodayContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appDataProvider = Provider.of<AppDataProvider>(context);
+    final userInfo = appDataProvider.getData('userInfo');
+
+    if (userInfo == null) {
+      return Center(child: CircularProgressIndicator());
+    }
+
+    String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    String formattedDayOfWeek = DateFormat('EEEE').format(DateTime.now());
+
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Consumer<AppDataProvider>(
+      backgroundColor: Color(0xffffffff),
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              expandedHeight: 300.0,
+              floating: false,
+              pinned: true,
+              stretch: true,
+              backgroundColor: Color(0xffffffff),
+              flexibleSpace: Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: FlexibleSpaceBar(
+                  centerTitle: true,
+                  collapseMode: CollapseMode.none,
+                  title: LayoutBuilder(
+                    builder: (context, constraints) {
+                      double top = constraints.biggest.height;
+                      if (top <= kToolbarHeight) {
+                        return Text(
+                          "今天的记录",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      } else {
+                        return SizedBox();
+                      }
+                    },
+                  ),
+                  background: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20.0),
+                      bottomRight: Radius.circular(20.0),
+                    ),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Container(
+                          color: Color(0xFF1CAE81),
+                        ),
+                        Positioned.fill(
+                          child: Opacity(
+                            opacity: 0.1,
+                            child: Image.asset(
+                              "assets/img/banner/today_banner.jpg",
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '今天是：$formattedDate',
+                                style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                '星期$formattedDayOfWeek',
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.white70),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ];
+        },
+        body: Consumer<AppDataProvider>(
           builder: (context, appDataProvider, child) {
-            final userInfo = appDataProvider.getData('userInfo');
-
-            if (userInfo == null) {
-              return Center(child: CircularProgressIndicator());
-            }
-
-            String formattedDate =
-                DateFormat('yyyy-MM-dd').format(DateTime.now());
-            String formattedDayOfWeek =
-                DateFormat('EEEE').format(DateTime.now());
-
-            final createTime = userInfo['createTime'] != null
-                ? DateTime.parse(userInfo['createTime'])
-                : DateTime.now();
-            final birthday = userInfo['birthday'] != null
-                ? DateTime.parse(userInfo['birthday'])
-                : DateTime(1999, 1, 1);
-
-            final today = DateTime.now();
-            final daysSinceBirth = today.difference(birthday).inDays;
-            final daysUsingApp = today.difference(createTime).inDays;
-
             var dayRecord = appDataProvider.getData('dayrecord');
             List<Map<String, dynamic>> records = [];
             if (dayRecord['record'] != null) {
               records = List<Map<String, dynamic>>.from(dayRecord['record']);
             }
 
-            return SafeArea(
-              child: Column(
-                children: [
-                  // 顶部区域
-                  Container(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.35,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF00D0A9),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(16),
-                        bottomRight: Radius.circular(16),
+            var length = dayRecord['record']?.length ?? 0;
+
+            return ListView(
+              children: [
+                SizedBox(height: 36),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '今日记录 $length 条',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 30.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '今天是：$formattedDate',
-                            style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            '星期$formattedDayOfWeek',
-                            style:
-                                TextStyle(fontSize: 18, color: Colors.white70),
-                          ),
-                          SizedBox(height: 20),
-                          Text(
-                            '你加入的日期：${DateFormat('yyyy-MM-dd').format(createTime)}',
-                            style: TextStyle(fontSize: 16, color: Colors.white),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            '你一共活了：$daysSinceBirth 天',
-                            style: TextStyle(fontSize: 16, color: Colors.white),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            '你已经使用该App：$daysUsingApp 天',
-                            style: TextStyle(fontSize: 16, color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  // 下半部分，白色背景
-                  Container(
-                    width: double.infinity,
-                    color: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '记录列表',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 10),
-                        records.isEmpty
-                            ? Center(child: Text('暂无记录'))
-                            : Column(
-                                children: records.map((record) {
-                                  return Container(
-                                    margin: EdgeInsets.only(bottom: 12),
-                                    padding: EdgeInsets.all(16),
-                                    decoration: BoxDecoration(
-                                      color: Colors.blue[50],
+                      SizedBox(height: 16),
+                      records.isEmpty
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/img/banner/nodata.png',
+                                  width: 200,
+                                  height: 200,
+                                  fit: BoxFit.contain,
+                                ),
+                                SizedBox(height: 16),
+                                Text(
+                                  '今天还没有记录哦，快来添加吧！',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                SizedBox(height: 16),
+                                ElevatedButton(
+                                  onPressed: () => _showBottomSheet(context),
+                                  style: ElevatedButton.styleFrom(
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: Color(0xFF00D0A9),
+                                    shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.shade300,
-                                          blurRadius: 8,
-                                          offset: Offset(0, 4),
-                                        ),
-                                      ],
                                     ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                '类型: ${record['type'] ?? '未知'}',
-                                                style: TextStyle(fontSize: 14),
-                                              ),
-                                              Text(
-                                                '时间: ${record['createTime'] ?? '未知'}',
-                                                style: TextStyle(fontSize: 14),
-                                              ),
-                                              Text(
-                                                '内容: ${record['content'] ?? '无内容'}',
-                                                style: TextStyle(fontSize: 14),
-                                              ),
-                                            ],
-                                          ),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 32, vertical: 12),
+                                  ),
+                                  child: Text(
+                                    '添加记录',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Column(
+                              children: records.map((record) {
+                                return Container(
+                                  margin: EdgeInsets.only(bottom: 12),
+                                  padding: EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Color.fromRGBO(149, 157, 165, 0.2),
+                                        offset: Offset(0, 8),
+                                        blurRadius: 24,
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '类型: ${record['type'] ?? '未知'}',
+                                              style: TextStyle(fontSize: 14),
+                                            ),
+                                            Text(
+                                              '时间: ${record['createTime'] ?? '未知'}',
+                                              style: TextStyle(fontSize: 14),
+                                            ),
+                                            Text(
+                                              '内容: ${record['content'] ?? '无内容'}',
+                                              style: TextStyle(fontSize: 14),
+                                            ),
+                                          ],
                                         ),
-                                        IconButton(
-                                          icon: Icon(Icons.delete,
-                                              color: Colors.red),
-                                          onPressed: () {
-                                            _deleteRecord(
-                                                context, record['id']);
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                      ],
-                    ),
+                                      ),
+                                      IconButton(
+                                        icon: Icon(Icons.delete,
+                                            color: Colors.red),
+                                        onPressed: () {
+                                          _deleteRecord(context, record['id']);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             );
           },
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          _showBottomSheet(context);
-        },
+        onPressed: () => _showBottomSheet(context),
         label: const Text(
           '记录',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-            color: Colors.white,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white),
         ),
-        icon: const Icon(
-          Icons.edit_calendar,
-          size: 20,
-          color: Colors.white,
-        ),
+        icon: const Icon(Icons.edit_calendar, size: 20, color: Colors.white),
         backgroundColor: const Color(0xFF00D0A9),
       ),
     );

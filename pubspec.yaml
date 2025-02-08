@@ -35,6 +35,8 @@ dependencies:
   flutter_launcher_icons: ^0.14.3
   flutter_native_splash: ^2.4.4
   flutter_sound: ^9.21.1
+  floating_bubbles: ^2.6.2
+  word_cloud: ^1.0.3
 
 dev_dependencies:
   flutter_test:
@@ -94,9 +96,11 @@ flutter:
     - assets/img/record/fragment.png
     - assets/img/record/finance.png
     - assets/img/record/shopping.png
-    - assets/img/record/travel.png
+    - assets/img/record/travel.pngyaml
     - assets/img/record/study.png
     - assets/img/record/anniversary.png
     - assets/img/ill/fragment_banner.png
     - assets/img/home/home-record.png
     - assets/img/default-avatar.png
+    - assets/img/banner/today_banner.jpg
+    - assets/img/banner/nodata.png

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clover/pages/user/signin.dart';
-import 'package:clover/pages/home/profile_content.dart';
+import 'package:clover/pages/home/profile/profile_content.dart';
 import 'package:clover/pages/home/settings_content.dart';
 import 'package:clover/pages/home/statistics_content.dart';
 import 'package:clover/pages/home/calendar/calendar.dart';
@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
     DayRecordPage(), // 不包含导航栏
     NotificationsContent(), // 不包含导航栏
     SettingsContent(), // 不包含导航栏
-    ProfileContent(), // 不包含导航栏
+    ProfilePage(), // 不包含导航栏
   ];
 
   @override
