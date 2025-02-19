@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '/components/record_type_bottom_sheet.dart';
 import '/common/provider.dart';
 import '/common/api.dart';
+import '/common/record/record.dart';
 
 class TodayContent extends StatelessWidget {
   Future<Map<String, dynamic>> _getUserInfo(BuildContext context) async {
@@ -64,7 +65,7 @@ class TodayContent extends StatelessWidget {
                 padding: const EdgeInsets.all(0.0),
                 child: FlexibleSpaceBar(
                   centerTitle: true,
-                  collapseMode: CollapseMode.none,
+                  collapseMode: CollapseMode.parallax,
                   title: LayoutBuilder(
                     builder: (context, constraints) {
                       double top = constraints.biggest.height;
@@ -156,44 +157,101 @@ class TodayContent extends StatelessWidget {
                       ),
                       SizedBox(height: 16),
                       records.isEmpty
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/img/banner/nodata.png',
-                                  width: 200,
-                                  height: 200,
-                                  fit: BoxFit.contain,
-                                ),
-                                SizedBox(height: 16),
-                                Text(
-                                  '今天还没有记录哦，快来添加吧！',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey,
+                          ? Container(
+                              width: double.infinity,
+                              height: 400,
+                              alignment: Alignment.center,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/img/banner/nodata.png',
+                                    width: 200,
+                                    height: 200,
+                                    fit: BoxFit.contain,
                                   ),
-                                ),
-                                SizedBox(height: 16),
-                                ElevatedButton(
-                                  onPressed: () => _showBottomSheet(context),
-                                  style: ElevatedButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor: Color(0xFF00D0A9),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    '今天还没有记录哦，快来添加吧！',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey,
                                     ),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 32, vertical: 12),
                                   ),
-                                  child: Text(
-                                    '添加记录',
-                                    style: TextStyle(fontSize: 16),
+                                  SizedBox(height: 16),
+                                  ElevatedButton(
+                                    onPressed: () => _showBottomSheet(context),
+                                    style: ElevatedButton.styleFrom(
+                                      foregroundColor: Colors.white,
+                                      backgroundColor: Color(0xFF00D0A9),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 32, vertical: 12),
+                                    ),
+                                    child: Text(
+                                      '添加记录',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             )
                           : Column(
                               children: records.map((record) {
+                                // 查找 type 对应的项
+                                var typeInfo = recordTypeOptions.firstWhere(
+                                  (item) => item['type'] == record['type'],
+                                  orElse: () => {
+                                    'label': '未知',
+                                    'logo': 'assets/img/default.png'
+                                  },
+                                );
+
+                                // 预留 customContent 部分，根据不同 type 显示自定义内容
+                                Widget customContent;
+
+                                switch (record['type']) {
+                                  case 'sleep':
+                                    customContent = Text(
+                                      '睡眠质量: ${record['quality'] ?? '未知'}',
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.grey),
+                                    );
+                                    break;
+                                  case 'mood':
+                                    customContent = Text(
+                                      '心情指数: ${record['moodLevel'] ?? '未知'}',
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.grey),
+                                    );
+                                    break;
+                                  case 'diet':
+                                    customContent = Text(
+                                      '饮食情况: ${record['mealDetails'] ?? '未知'}',
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.grey),
+                                    );
+                                    break;
+                                  case 'exercise':
+                                    customContent = Text(
+                                      '运动时长: ${record['duration'] ?? '未知'}',
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.grey),
+                                    );
+                                    break;
+                                  case 'fragment':
+                                    customContent = Text(
+                                      '碎片: ${record['duration'] ?? '未知'}',
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.grey),
+                                    );
+                                    break;
+                                  default:
+                                    customContent = SizedBox(); // 默认不显示内容
+                                }
+
                                 return Container(
                                   margin: EdgeInsets.only(bottom: 12),
                                   padding: EdgeInsets.all(16),
@@ -202,36 +260,57 @@ class TodayContent extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(12),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Color.fromRGBO(149, 157, 165, 0.2),
+                                        color:
+                                            Color.fromRGBO(149, 157, 165, 0.2),
                                         offset: Offset(0, 8),
                                         blurRadius: 24,
                                       ),
                                     ],
                                   ),
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
+                                      // 显示缩略图
+                                      Image.asset(
+                                        typeInfo['logo'],
+                                        width: 40,
+                                        height: 40,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      SizedBox(width: 12),
+
+                                      // 文字信息
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              '类型: ${record['type'] ?? '未知'}',
-                                              style: TextStyle(fontSize: 14),
+                                              typeInfo['label'], // 显示标题
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                             Text(
                                               '时间: ${record['createTime'] ?? '未知'}',
-                                              style: TextStyle(fontSize: 14),
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.grey),
                                             ),
                                             Text(
                                               '内容: ${record['content'] ?? '无内容'}',
-                                              style: TextStyle(fontSize: 14),
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.grey),
                                             ),
+                                            // 显示特定的内容
+                                            customContent,
                                           ],
                                         ),
                                       ),
+
+                                      // 删除按钮
                                       IconButton(
                                         icon: Icon(Icons.delete,
                                             color: Colors.red),
@@ -256,7 +335,8 @@ class TodayContent extends StatelessWidget {
         onPressed: () => _showBottomSheet(context),
         label: const Text(
           '记录',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white),
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white),
         ),
         icon: const Icon(Icons.edit_calendar, size: 20, color: Colors.white),
         backgroundColor: const Color(0xFF00D0A9),
@@ -271,7 +351,7 @@ class TodayContent extends StatelessWidget {
       builder: (BuildContext context) {
         return RecordTypeBottomSheet(
           onOptionSelected: (selectType) {
-            String routeName = selectType + 'Record';
+            String routeName = '${selectType}Record';
             if (routeName.isNotEmpty) {
               Navigator.pushNamed(context, routeName);
             }

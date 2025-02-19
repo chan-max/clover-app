@@ -1,11 +1,10 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:clover/pages/user/signin.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clover/common/storage.dart';
-import 'dart:io'; // 导入 dart:io 以便处理证书相关内容
+// 导入 dart:io 以便处理证书相关内容
 import 'package:uuid/uuid.dart';
 
 // 定义一个全局的 NavigatorKey
@@ -220,6 +219,17 @@ dynamic getDayrecord({String? datekey}) async {
   }
   var res = await dioHttp.get(url);
   return res['data'];
+}
+
+Future<dynamic> updateDayrecord(Map<String, dynamic> post,
+    {String? datekey}) async {
+  String url = '/dayrecord/update';
+  if (datekey != null) {
+    url += '/$datekey';
+  }
+
+  var res = await dioHttp.post(url, data: post);
+  return res;
 }
 
 // 获取我的个人分析数据

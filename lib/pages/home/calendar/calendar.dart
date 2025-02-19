@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:provider/provider.dart';
-import '/common/provider.dart'; // 假设这个是你获取数据的 provider
+// 假设这个是你获取数据的 provider
 import '/common/api.dart'; // 假设这个是你用来获取数据的 API
-import 'package:clover/common/api.dart';
 
 class DayRecordPage extends StatefulWidget {
   @override

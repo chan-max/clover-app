@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clover/pages/user/signin.dart';
 import 'package:clover/pages/home/profile/profile_content.dart';
 import 'package:clover/pages/home/settings_content.dart';
-import 'package:clover/pages/home/statistics_content.dart';
 import 'package:clover/pages/home/calendar/calendar.dart';
 import 'package:clover/pages/home/notifications_content.dart';
 // 导入新创建的组件

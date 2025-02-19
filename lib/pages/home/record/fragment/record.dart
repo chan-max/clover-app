@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // 用于格式化日期
+// 用于格式化日期
 import 'package:provider/provider.dart'; // 引入 provider
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '/common/provider.dart';

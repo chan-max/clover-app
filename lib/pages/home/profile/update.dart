@@ -5,7 +5,7 @@ import 'package:clover/common/api.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart'; // 假设你有一个 API 用来更新用户信息
 
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({Key? key}) : super(key: key);
+  const EditProfilePage({super.key});
 
   @override
   _EditProfilePageState createState() => _EditProfilePageState();

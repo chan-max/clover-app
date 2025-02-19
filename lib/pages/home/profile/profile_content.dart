@@ -10,7 +10,7 @@ import 'package:clover/pages/user/signin.dart';
 import 'package:clover/common/api.dart';
 import './update.dart';
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -135,7 +135,7 @@ class _ProfilePageState extends State<ProfilePage> {
 }
 
 class _ProfileInfoRow extends StatelessWidget {
-  const _ProfileInfoRow({Key? key}) : super(key: key);
+  const _ProfileInfoRow({super.key});
 
   final List<ProfileInfoItem> _items = const [
     ProfileInfoItem("已加入", 900),
@@ -192,7 +192,7 @@ class ProfileInfoItem {
 }
 
 class _TopPortion extends StatelessWidget {
-  const _TopPortion({Key? key, required this.userInfo}) : super(key: key);
+  const _TopPortion({super.key, required this.userInfo});
 
   final dynamic userInfo;
 
