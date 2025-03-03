@@ -43,7 +43,6 @@ class AppDataProvider extends ChangeNotifier {
   // 初始化方法，调用各个数据的加载方法
   Future<void> init() async {
     await fetchDayRecord();
-    await fetchDayRecordLatest7();
     await fetchUserInfo();
     // await fetchSettings();
   }

@@ -6,6 +6,7 @@ import '/common/provider.dart';
 import '/common/api.dart';
 import '/common/record/record.dart';
 
+
 class TodayContent extends StatelessWidget {
   Future<Map<String, dynamic>> _getUserInfo(BuildContext context) async {
     final appDataProvider = Provider.of<AppDataProvider>(context, listen: false);
@@ -13,33 +14,59 @@ class TodayContent extends StatelessWidget {
     return userInfo ?? {};
   }
 
-  void _deleteRecord(BuildContext context, String recordId) async {
-    var dayRecord = Provider.of<AppDataProvider>(context, listen: false).getData('dayrecord');
-    var pid = dayRecord['id'];
+  
 
-    Map<String, dynamic> postData = {
-      'pid': pid,
-      'id': recordId,
-    };
+void _deleteRecord(BuildContext context, String recordId) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('确认删除'),
+        content: Text('你确定要删除这条记录吗？此操作无法撤销。'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // 取消删除
+            },
+            child: Text('取消'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(context).pop(); // 关闭对话框
+              var dayRecord = Provider.of<AppDataProvider>(context, listen: false).getData('dayrecord');
+              var pid = dayRecord['id'];
 
-    try {
-      await deleteDayrecordDetail(postData);
-      Provider.of<AppDataProvider>(context, listen: false).fetchDayRecord();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('记录已删除', style: TextStyle(color: Colors.white)),
-          backgroundColor: Color(0xFF00F5E1),
-        ),
+              Map<String, dynamic> postData = {
+                'pid': pid,
+                'id': recordId,
+              };
+
+              try {
+                await deleteDayrecordDetail(postData);
+                Provider.of<AppDataProvider>(context, listen: false).fetchDayRecord();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('记录已删除', style: TextStyle(color: Colors.white)),
+                    backgroundColor: Color(0xFF00F5E1),
+                  ),
+                );
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('删除失败: $e', style: TextStyle(color: Colors.white)),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            child: Text('删除', style: TextStyle(color: Colors.red)),
+          ),
+        ],
       );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('删除失败: $e', style: TextStyle(color: Colors.white)),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
+    },
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -146,6 +173,7 @@ class TodayContent extends StatelessWidget {
                 builder: (context, appDataProvider, child) {
                   var dayRecord = appDataProvider.getData('dayrecord');
                   List<Map<String, dynamic>> records = [];
+
                   if (dayRecord['record'] != null) {
                     records = List<Map<String, dynamic>>.from(dayRecord['record']);
                   }
@@ -196,14 +224,7 @@ class TodayContent extends StatelessWidget {
                                   )
                                 : Column(
                                     children: records.map((record) {
-                                      var typeInfo = recordTypeOptions.firstWhere(
-                                        (item) => item['type'] == record['type'],
-                                        orElse: () => {
-                                          'label': '未知',
-                                          'logo': 'assets/img/default.png'
-                                        },
-                                      );
-
+                 
                                       Widget customContent;
                                       switch (record['type']) {
                                         case 'sleep':
@@ -272,25 +293,10 @@ class TodayContent extends StatelessWidget {
                                         child: Row(
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
-                                            Image.asset(
-                                              typeInfo['logo'],
-                                              width: 40,
-                                              height: 40,
-                                              fit: BoxFit.cover,
-                                            ),
-                                            SizedBox(width: 12),
                                             Expanded(
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                    typeInfo['label'],
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Color(0xFFFFFFFF),
-                                                    ),
-                                                  ),
                                                   Text(
                                                     '时间: ${record['createTime'] ?? '未知'}',
                                                     style: TextStyle(
@@ -440,8 +446,33 @@ class _BottomSheetContentState extends State<_BottomSheetContent> {
         ),
         const SizedBox(height: 16),
         ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context); // 关闭 BottomSheet
+          onPressed:  () async {
+
+               String inputText = _controller.text.trim(); // 获取输入框的值并去除首尾空格
+
+                if (inputText.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('请输入内容')),
+                  );
+                  return;
+                }
+
+                var params = {
+                  'content': inputText, // 传递输入的内容
+                  'type': 'prompt', // 可以添加其他字段，比如记录类型
+                };
+
+                await addDayRecordDetail(null, params);
+
+                // 更新数据
+                Provider.of<AppDataProvider>(context, listen: false).fetchDayRecord();
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('日记保存成功')),
+                );
+
+                Navigator.pop(context); // 关闭 BottomSheet
+
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.greenAccent,
