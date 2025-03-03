@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import './signup.dart';
 import 'package:clover/pages/home.dart';
 import 'package:clover/common/api.dart'; // 导入封装的DioHttp
-// 导入 shared_preferences
 
 class SignInScreen extends StatefulWidget {
   SignInScreen({super.key});
@@ -13,8 +12,8 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
-  String _username = ''; // 用于存储用户输入的账号
-  String _password = ''; // 用于存储用户输入的密码
+  String _username = '';
+  String _password = '';
 
   void _navigateWithSlide(BuildContext context, Widget page) {
     Navigator.of(context).push(
@@ -40,23 +39,21 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save(); // 保存表单输入内容
+      _formKey.currentState!.save();
       setState(() {
         _isLoading = true;
       });
 
       try {
-        // 调用 login 接口
         await signin(_username, _password);
         await getUserInfo();
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()), // 替换登录页
+          MaterialPageRoute(builder: (context) => HomePage()),
         );
       } catch (e) {
-        // 显示错误提示
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('登录失败')),
+          SnackBar(content: Text('登录失败', style: TextStyle(color: Colors.white))),
         );
       } finally {
         setState(() {
@@ -69,7 +66,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black, // 黑色背景
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -89,7 +86,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     style: Theme.of(context)
                         .textTheme
                         .headlineSmall!
-                        .copyWith(fontWeight: FontWeight.bold),
+                        .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                   SizedBox(height: constraints.maxHeight * 0.05),
                   Form(
@@ -97,10 +94,12 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: Column(
                       children: [
                         TextFormField(
-                          decoration: const InputDecoration(
-                            hintText: '用户名', // 提示文本改为“用户名”
+                          style: TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            hintText: '用户名',
+                            hintStyle: TextStyle(color: Colors.grey[500]),
                             filled: true,
-                            fillColor: Color(0xFFF5FCF9),
+                            fillColor: Colors.grey[900], // 深灰色填充
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 24.0, vertical: 16.0),
                             border: OutlineInputBorder(
@@ -110,17 +109,19 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                           ),
                           onSaved: (value) {
-                            _username = value ?? ''; // 保存用户名
+                            _username = value ?? '';
                           },
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
                           child: TextFormField(
                             obscureText: true,
-                            decoration: const InputDecoration(
+                            style: TextStyle(color: Colors.white),
+                            decoration: InputDecoration(
                               hintText: '密码',
+                              hintStyle: TextStyle(color: Colors.grey[500]),
                               filled: true,
-                              fillColor: Color(0xFFF5FCF9),
+                              fillColor: Colors.grey[900], // 深灰色填充
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 24.0, vertical: 16.0),
                               border: OutlineInputBorder(
@@ -138,8 +139,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           onPressed: _isLoading ? null : _handleLogin,
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
-                            backgroundColor: const Color(0xFF00D0A9),
-                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.greenAccent, // 亮绿色按钮
+                            foregroundColor: Colors.black,
                             minimumSize: const Size(double.infinity, 48),
                             shape: const StadiumBorder(),
                           ),
@@ -148,7 +149,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   width: 24,
                                   height: 24,
                                   child: CircularProgressIndicator(
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     strokeWidth: 2.0,
                                   ),
                                 )
@@ -163,11 +164,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 .textTheme
                                 .bodyMedium!
                                 .copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color!
-                                      .withOpacity(0.64),
+                                  color: Colors.grey[500],
                                 ),
                           ),
                         ),
@@ -176,12 +173,12 @@ class _SignInScreenState extends State<SignInScreen> {
                             _navigateWithSlide(context, SignUpScreen());
                           },
                           child: Text.rich(
-                            const TextSpan(
+                            TextSpan(
                               text: "还没有账号吗 ",
                               children: [
                                 TextSpan(
                                   text: "快速注册",
-                                  style: TextStyle(color: Color(0xFF00D0A9)),
+                                  style: TextStyle(color: Colors.greenAccent),
                                 ),
                               ],
                             ),
@@ -189,11 +186,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 .textTheme
                                 .bodyMedium!
                                 .copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .color!
-                                      .withOpacity(0.64),
+                                  color: Colors.grey[500],
                                 ),
                           ),
                         ),

@@ -335,22 +335,23 @@ class TodayContent extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () => _showBottomSheet(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF00F5E1), // Teal background
+                    backgroundColor: Color(0xFF222222), // Teal background
                     foregroundColor: Colors.black, // Black text/icon
-                    padding: EdgeInsets.symmetric(vertical: 14.0),
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0), // Rounded corners
+                      borderRadius: BorderRadius.circular(999.0), // Rounded corners
                     ),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.edit_calendar, size: 20),
-                      SizedBox(width: 8),
+                      Icon(Icons.edit, size: 16,color: Color.fromRGBO(255, 255, 255, .7),),
+                      SizedBox(width: 4),
                       Text(
                         '添加记录',
                         style: TextStyle(
-                          fontSize: 16,
+                          color: Color.fromRGBO(255, 255, 255, .7),
+                          fontSize: 13,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -365,20 +366,95 @@ class TodayContent extends StatelessWidget {
     );
   }
 
-  void _showBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return RecordTypeBottomSheet(
-          onOptionSelected: (selectType) {
-            String routeName = '${selectType}Record';
-            if (routeName.isNotEmpty) {
-              Navigator.pushNamed(context, routeName);
-            }
+void _showBottomSheet(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.black, // 背景设置为黑色
+    builder: (BuildContext context) {
+      return Container(
+        height: MediaQuery.of(context).size.height * 0.95, // 让弹窗接近全屏
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom, // 适配键盘弹出
+          left: 16.0,
+          right: 16.0,
+          top: 20.0,
+        ),
+        child: _BottomSheetContent(),
+      );
+    },
+  );
+}
+}
+
+
+class _BottomSheetContent extends StatefulWidget {
+  @override
+  _BottomSheetContentState createState() => _BottomSheetContentState();
+}
+
+class _BottomSheetContentState extends State<_BottomSheetContent> {
+  final TextEditingController _controller = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 200), () {
+      _focusNode.requestFocus(); // 让输入框自动获取焦点
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "请输入内容",
+          style: TextStyle(color: Colors.white, fontSize: 18),
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _controller,
+          focusNode: _focusNode,
+          style: TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+            hintText: '在这里输入...',
+            hintStyle: TextStyle(color: Colors.grey[500]),
+            filled: true,
+            fillColor: Colors.grey[900], // 深灰色背景
+            border: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+        ),
+        const SizedBox(height: 16),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context); // 关闭 BottomSheet
           },
-        );
-      },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.greenAccent,
+            foregroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            minimumSize: Size(double.infinity, 48),
+          ),
+          child: Text("确认"),
+        ),
+        const SizedBox(height: 20),
+      ],
     );
   }
 }

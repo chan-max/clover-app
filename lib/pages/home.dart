@@ -15,6 +15,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  
   int _currentIndex = 0;
 
   // 页面列表，部分页面显示自定义导航栏
@@ -56,6 +58,7 @@ class _HomePageState extends State<HomePage> {
         style: TextStyle(
           color: Color(0xFFFFFFFF), // 白色标题
           fontWeight: FontWeight.bold,
+          fontSize: 14
         ),
       ),
       actions: [
