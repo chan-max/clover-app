@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  
+
   int _currentIndex = 0;
 
   // 页面列表，部分页面显示自定义导航栏
@@ -49,7 +49,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final currentChild = _pages[_currentIndex];
 
-    // 定义 AppBar，黑色背景，白色文字，TikTok风格的退出按钮
     PreferredSizeWidget? appBar = AppBar(
       backgroundColor: const Color(0xFF000000), // 黑色背景
       elevation: 0, // 移除阴影，与TikTok简洁风格一致
