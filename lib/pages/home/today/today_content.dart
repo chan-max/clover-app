@@ -9,7 +9,7 @@ import '/common/record/record.dart';
 
 class TodayContent extends StatelessWidget {
   Future<Map<String, dynamic>> _getUserInfo(BuildContext context) async {
-    final appDataProvider = Provider.of<AppDataProvider>(context, listen: false);
+    final appDataProvider = Provider.of<AppDataProvider>(context, listen: true);
     final userInfo = await appDataProvider.getData('userInfo');
     return userInfo ?? {};
   }
