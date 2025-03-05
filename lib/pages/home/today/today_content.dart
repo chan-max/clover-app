@@ -216,7 +216,8 @@ void _deleteRecord(BuildContext context, String recordId) {
                                           '今天还没有记录哦，快来添加吧！',
                                           style: TextStyle(
                                             fontSize: 14,
-                                            color: Color(0xFF666666),
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFF888888),
                                           ),
                                         ),
                                       ],

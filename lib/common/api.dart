@@ -21,8 +21,8 @@ final String _baseUrl = kReleaseMode
 
 BaseOptions options = BaseOptions(
   baseUrl: _baseUrl,
-  connectTimeout: Duration(milliseconds: 5000), // 连接超时时间
-  receiveTimeout: Duration(milliseconds: 3000), // 接收超时时间
+  connectTimeout: Duration(milliseconds: 50000), // 连接超时时间
+  receiveTimeout: Duration(milliseconds: 30000), // 接收超时时间
   contentType: 'application/json', // 请求体的内容类型
   responseType: ResponseType.json, // 期望的响应数据类型
   headers: {}, // 请求头

@@ -73,6 +73,7 @@ flutter:
     - assets/img/
     - assets/logo.png
     - assets/clover_heart.png
+    - assets/img/coin.png #金币
     - assets/img/record/sleep.png
     - assets/img/record/diet.png
     - assets/img/record/water.png

@@ -8,6 +8,7 @@ import 'package:clover/pages/home/notifications_content.dart';
 import 'package:provider/provider.dart';
 import '/pages/home/today/today_content.dart';
 import '/common/provider.dart'; // 导入你的 AppDataProvider
+import 'package:clover/views/topBar.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -49,28 +50,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final currentChild = _pages[_currentIndex];
 
-    PreferredSizeWidget? appBar = AppBar(
-      backgroundColor: const Color(0xFF000000), // 黑色背景
-      elevation: 0, // 移除阴影，与TikTok简洁风格一致
-      title: const Text(
-        '四叶草',
-        style: TextStyle(
-          color: Color(0xFFFFFFFF), // 白色标题
-          fontWeight: FontWeight.bold,
-          fontSize: 14
-        ),
-      ),
-      actions: [
-        IconButton(
-          onPressed: _logout,
-          icon: const Icon(Icons.logout),
-          color: Color(0xFF00F5E1), // TikTok风格的青色
-        ),
-      ],
-    );
-
     return Scaffold(
-      appBar: appBar,
+      appBar: CustomAppBar(),
       backgroundColor: const Color(0xFF000000), // 深黑色背景
       body: SafeArea(
         child: IndexedStack(

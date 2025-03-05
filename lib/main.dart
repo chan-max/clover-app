@@ -17,6 +17,8 @@ void main() async {
     ChangeNotifierProvider(
       create: (context) => AppDataProvider(),
       child: MyApp(isLoggedIn: token != null),
+
+      
     ),
   ); // 根据 token 是否存在跳转页面
 }
@@ -29,6 +31,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: '四叶草',
       locale: Locale('zh'),
       localizationsDelegates: [
