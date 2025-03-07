@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clover/common/storage.dart';
 // 导入 dart:io 以便处理证书相关内容
 import 'package:uuid/uuid.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 // 定义一个全局的 NavigatorKey
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -75,12 +76,8 @@ class DioHttp {
           // 提示用户身份过期
           final context = navigatorKey.currentState?.context;
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('用户身份过期，请重新登录'),
-                duration: Duration(seconds: 3),
-              ),
-            );
+
+            TDToast.showText('用户身份过期，请重新登录', context: context);
           }
 
           // 跳转到登录页面
@@ -105,12 +102,7 @@ class DioHttp {
           // 提示用户身份过期
           final context = navigatorKey.currentState?.context;
           if (context != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('用户身份过期，请重新登录'),
-                duration: Duration(seconds: 3),
-              ),
-            );
+             TDToast.showText('用户身份过期，请重新登录', context: context);
           }
 
           // 跳转到登录页面
@@ -120,7 +112,8 @@ class DioHttp {
           );
         }
 
-        return handler.next(error); // 继续抛出错误
+        return handler
+        .next(error); // 继续抛出错误
       },
     ));
 

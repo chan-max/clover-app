@@ -37,6 +37,8 @@ dependencies:
   flutter_sound: ^9.21.1
   floating_bubbles: ^2.6.2
   word_cloud: ^1.0.3
+  introduction_screen: ^3.1.17
+  get: ^4.7.2
 
 dev_dependencies:
   flutter_test:
@@ -52,7 +54,7 @@ flutter_icons:
   adaptive_icon_background: '#ffffff' # 背景色（可以是颜色或图片）
 
 flutter_native_splash:
-  color: '#ffffff' # 背景色（仅用于适配特殊情况）
+  color: '#000000' # 背景色（仅用于适配特殊情况）
   image: assets/splash.png # 统一的启动页图片
   android: true
   ios: true

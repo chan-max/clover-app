@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '/components/record_type_bottom_sheet.dart';
 import '/common/provider.dart';
 import '/common/api.dart';
-import '/common/record/record.dart';
-
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 class TodayContent extends StatelessWidget {
   Future<Map<String, dynamic>> _getUserInfo(BuildContext context) async {
@@ -14,59 +12,47 @@ class TodayContent extends StatelessWidget {
     return userInfo ?? {};
   }
 
-  
+  void _deleteRecord(BuildContext context, String recordId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('确认删除'),
+          content: Text('你确定要删除这条记录吗？此操作无法撤销。'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // 取消删除
+              },
+              child: Text('取消'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(); // 关闭对话框
+                var dayRecord = Provider.of<AppDataProvider>(context, listen: false).getData('dayrecord');
+                var pid = dayRecord['id'];
 
-void _deleteRecord(BuildContext context, String recordId) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('确认删除'),
-        content: Text('你确定要删除这条记录吗？此操作无法撤销。'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // 取消删除
-            },
-            child: Text('取消'),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.of(context).pop(); // 关闭对话框
-              var dayRecord = Provider.of<AppDataProvider>(context, listen: false).getData('dayrecord');
-              var pid = dayRecord['id'];
+                Map<String, dynamic> postData = {
+                  'pid': pid,
+                  'id': recordId,
+                };
 
-              Map<String, dynamic> postData = {
-                'pid': pid,
-                'id': recordId,
-              };
-
-              try {
-                await deleteDayrecordDetail(postData);
-                Provider.of<AppDataProvider>(context, listen: false).fetchDayRecord();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('记录已删除', style: TextStyle(color: Colors.white)),
-                    backgroundColor: Color(0xFF00F5E1),
-                  ),
-                );
-              } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('删除失败: $e', style: TextStyle(color: Colors.white)),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            },
-            child: Text('删除', style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      );
-    },
-  );
-}
-
+                try {
+                  await deleteDayrecordDetail(postData);
+                  Provider.of<AppDataProvider>(context, listen: false).fetchDayRecord();
+                    TDToast.showText('记录已删除', context: context);
+                } catch (e) {
+                    TDToast.showText('删除失败', context: context);
+            
+                }
+              },
+              child: Text('删除', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -225,7 +211,6 @@ void _deleteRecord(BuildContext context, String recordId) {
                                   )
                                 : Column(
                                     children: records.map((record) {
-                 
                                       Widget customContent;
                                       switch (record['type']) {
                                         case 'sleep':
@@ -335,157 +320,210 @@ void _deleteRecord(BuildContext context, String recordId) {
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => _showBottomSheet(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF222222), // Teal background
-                    foregroundColor: Colors.black, // Black text/icon
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(999.0), // Rounded corners
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.edit, size: 16,color: Color.fromRGBO(255, 255, 255, .7),),
-                      SizedBox(width: 4),
-                      Text(
-                        '添加记录',
-                        style: TextStyle(
-                          color: Color.fromRGBO(255, 255, 255, .7),
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            _BottomInputSection(),
           ],
         ),
       ),
     );
   }
-
-void _showBottomSheet(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.black, // 背景设置为黑色
-    builder: (BuildContext context) {
-      return Container(
-        height: MediaQuery.of(context).size.height * 0.95, // 让弹窗接近全屏
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom, // 适配键盘弹出
-          left: 16.0,
-          right: 16.0,
-          top: 20.0,
-        ),
-        child: _BottomSheetContent(),
-      );
-    },
-  );
 }
-}
-
-
-class _BottomSheetContent extends StatefulWidget {
+class _BottomInputSection extends StatefulWidget {
   @override
-  _BottomSheetContentState createState() => _BottomSheetContentState();
+  _BottomInputSectionState createState() => _BottomInputSectionState();
 }
 
-class _BottomSheetContentState extends State<_BottomSheetContent> {
+class _BottomInputSectionState extends State<_BottomInputSection> {
   final TextEditingController _controller = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
 
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration(milliseconds: 200), () {
-      _focusNode.requestFocus(); // 让输入框自动获取焦点
-    });
-  }
+  
+  bool _isInputVisible = false;
 
   @override
   void dispose() {
     _controller.dispose();
-    _focusNode.dispose();
     super.dispose();
+  }
+
+  void _addRecord() async {
+    String inputText = _controller.text.trim();
+
+    if (inputText.isEmpty) {
+
+        TDToast.showWarning('请输入内容',
+            direction: IconTextDirection.horizontal, context: context);
+      return;
+    }
+
+    var params = {
+      'content': inputText,
+      'type': 'prompt',
+    };
+
+    try {
+      await addDayRecordDetail(null, params);
+      Provider.of<AppDataProvider>(context, listen: false).fetchDayRecord();
+      
+      TDToast.showText('记录添加成功', context: context);
+      _controller.clear();
+      setState(() {
+        _isInputVisible = false; // 添加成功后关闭输入框和按钮
+      });
+    } catch (e) {
+      TDToast.showText('添加失败请重试', context: context);
+    }
+  }
+
+  void _showInputSection() {
+    setState(() {
+      _isInputVisible = true;
+    });
+  }
+
+  void _closeInputSection() {
+    setState(() {
+      _isInputVisible = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
       children: [
-        Text(
-          "请输入内容",
-          style: TextStyle(color: Colors.white, fontSize: 18),
-        ),
-        const SizedBox(height: 12),
-        TextField(
-          controller: _controller,
-          focusNode: _focusNode,
-          style: TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-            hintText: '在这里输入...',
-            hintStyle: TextStyle(color: Colors.grey[500]),
-            filled: true,
-            fillColor: Colors.grey[900], // 深灰色背景
-            border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(8),
+        // 蒙层
+        if (_isInputVisible)
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: _closeInputSection, // 点击蒙层时关闭
+              behavior: HitTestBehavior.opaque, // 确保蒙层可以捕获点击事件
+              child: Container(
+                color: Colors.black.withOpacity(0.6), // 黑色带透明度
+              ),
             ),
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+        // 输入框和按钮区域
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 300),
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            color: Colors.transparent,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (_isInputVisible)
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[900],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          '记录你的每一天',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          '写下今天的感受或计划，让每一天都更有意义。',
+                          style: TextStyle(
+                            color: Colors.grey[400],
+                            fontSize: 14,
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Icon(Icons.emoji_emotions, color: Colors.greenAccent),
+                            SizedBox(width: 8),
+                            Text(
+                              '心情记录',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(Icons.calendar_today, color: Colors.blueAccent),
+                            SizedBox(width: 8),
+                            Text(
+                              '每日计划',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(Icons.star, color: Colors.orangeAccent),
+                            SizedBox(width: 8),
+                            Text(
+                              '成就打卡',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                SizedBox(height: 16),
+                GestureDetector(
+                  onTap: _showInputSection, // 点击输入框时显示按钮
+                  child: TextField(
+                    controller: _controller,
+                    enabled: _isInputVisible, // 如果输入框已显示，则启用输入
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: '添加记录...',
+                      hintStyle: TextStyle(color: Colors.grey[500]),
+                      filled: true,
+                      fillColor: Colors.grey[900],
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    ),
+                  ),
+                ),
+                if (_isInputVisible)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _addRecord,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.greenAccent,
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 16.0),
+                        ),
+                        child: Text("保存记录"),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
-        const SizedBox(height: 16),
-        ElevatedButton(
-          onPressed:  () async {
-
-               String inputText = _controller.text.trim(); // 获取输入框的值并去除首尾空格
-
-                if (inputText.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('请输入内容')),
-                  );
-                  return;
-                }
-
-                var params = {
-                  'content': inputText, // 传递输入的内容
-                  'type': 'prompt', // 可以添加其他字段，比如记录类型
-                };
-
-                await addDayRecordDetail(null, params);
-
-                // 更新数据
-                Provider.of<AppDataProvider>(context, listen: false).fetchDayRecord();
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('日记保存成功')),
-                );
-
-                Navigator.pop(context); // 关闭 BottomSheet
-
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.greenAccent,
-            foregroundColor: Colors.black,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            minimumSize: Size(double.infinity, 48),
-          ),
-          child: Text("确认"),
-        ),
-        const SizedBox(height: 20),
       ],
     );
   }

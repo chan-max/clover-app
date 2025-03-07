@@ -7,8 +7,10 @@ import 'package:clover/pages/home/calendar/calendar.dart';
 import 'package:clover/pages/home/notifications_content.dart';
 import 'package:provider/provider.dart';
 import '/pages/home/today/today_content.dart';
-import '/common/provider.dart'; // 导入你的 AppDataProvider
+import '/common/provider.dart';
 import 'package:clover/views/topBar.dart';
+import 'package:clover/pages/common/intro.dart'; // 引导页
+import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,24 +18,31 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-
   int _currentIndex = 0;
 
-  // 页面列表，部分页面显示自定义导航栏
   final List<Widget> _pages = [
     TodayContent(),
-    DayRecordPage(),
-    NotificationsContent(),
-    SettingsContent(),
+    TodayContent(),
+    TodayContent(),
+    TodayContent(),
     ProfilePage(),
   ];
 
   @override
   void initState() {
     super.initState();
-    // 在页面初始化时调用 AppDataProvider 的 init 方法来加载数据
     Provider.of<AppDataProvider>(context, listen: false).init();
+    _checkIntroScreen();
+  }
+
+  Future<void> _checkIntroScreen() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool hasSeenIntro = prefs.getBool('hasSeenIntro') ?? false;
+
+    if (!hasSeenIntro) {
+      await prefs.setBool('hasSeenIntro', true);
+      Get.toNamed('/intro');
+    }
   }
 
   Future<void> _logout() async {
@@ -48,11 +57,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final currentChild = _pages[_currentIndex];
-
     return Scaffold(
       appBar: CustomAppBar(),
-      backgroundColor: const Color(0xFF000000), // 深黑色背景
+      backgroundColor: const Color(0xFF000000),
       body: SafeArea(
         child: IndexedStack(
           index: _currentIndex,
@@ -60,7 +67,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFF000000), // 黑色导航栏
+        backgroundColor: const Color(0xFF000000),
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
         onTap: (index) {
@@ -68,12 +75,12 @@ class _HomePageState extends State<HomePage> {
             _currentIndex = index;
           });
         },
-        selectedItemColor: const Color(0xFFFFFFFF), // TikTok青色选中色
-        unselectedItemColor: const Color(0xFF666666), // 未选中为灰色
-        selectedFontSize: 10.0, // 选中文字稍大
-        unselectedFontSize: 8.0, // 未选中文字较小
-        selectedIconTheme: const IconThemeData(size: 28.0), // 选中图标更大
-        unselectedIconTheme: const IconThemeData(size: 24.0), // 未选中图标
+        selectedItemColor: const Color(0xFFFFFFFF),
+        unselectedItemColor: const Color(0xFF666666),
+        selectedFontSize: 10.0,
+        unselectedFontSize: 8.0,
+        selectedIconTheme: const IconThemeData(size: 28.0),
+        unselectedIconTheme: const IconThemeData(size: 24.0),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.edit_calendar),
@@ -97,11 +104,11 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
         selectedLabelStyle: const TextStyle(
-          color: Color(0xFFFFFFFF), // 选中标签为白色
+          color: Color(0xFFFFFFFF),
           fontWeight: FontWeight.bold,
         ),
         unselectedLabelStyle: const TextStyle(
-          color: Color(0xFF666666), // 未选中标签为灰色
+          color: Color(0xFF666666),
         ),
       ),
     );

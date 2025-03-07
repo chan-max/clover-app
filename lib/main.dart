@@ -3,10 +3,10 @@ import 'package:shared_preferences/shared_preferences.dart'; // 用于本地存�
 import './pages/user/signin.dart'; // 导入登录页面
 import './pages/home.dart'; // 导入首页
 import 'package:clover/common/api.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import '/common/provider.dart';
-import '/common/router.dart';
+import 'package:get/get.dart';
+import 'package:clover/common/router_get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 确保初始化完成
@@ -30,20 +30,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: '四叶草',
-      locale: Locale('zh'),
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: [
-        //此处
-        const Locale('zh', 'CH'),
-        const Locale('en', 'US'),
-      ],
       navigatorKey: navigatorKey, // 绑定全局 NavigatorKey
       theme: ThemeData(
         primaryColor: Color(0xFF00D0A9), // 设置主题色为 #ea4c89
@@ -66,7 +55,7 @@ class MyApp extends StatelessWidget {
       ),
       home: isLoggedIn ? HomePage() : SignInScreen(),
       // : LoginPage(), // 根据状态切换页面
-      routes: AppRoutes.getRoutes(),
+      getPages: AppPage.routes,
     );
   }
 }

@@ -1,7 +1,8 @@
+import 'package:clover/common/style.dart';
 import 'package:flutter/material.dart';
 import './signin.dart';
 import 'package:clover/common/api.dart';
-
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({super.key});
 
@@ -22,14 +23,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       try {
         await signup(_username, _password);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('注册成功')),
-        );
+         TDToast.showText('注册成功', context: context);
         _navigateWithSlide(context, SignInScreen());
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        TDToast.showText('记录失败', context: context);
       } finally {
         setState(() => _isLoading = false);
       }
@@ -119,7 +116,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           onPressed: _isLoading ? null : _handleSignUp,
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
-                            backgroundColor: Colors.greenAccent[400],
+                            backgroundColor: PrimaryColor,
                             foregroundColor: Colors.black,
                             minimumSize: const Size(double.infinity, 48),
                             shape: const StadiumBorder(),

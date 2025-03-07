@@ -1,8 +1,11 @@
+import 'package:clover/common/style.dart';
 import 'package:flutter/material.dart';
 import './signup.dart';
 import 'package:clover/pages/home.dart';
 import 'package:clover/common/api.dart'; // 导入封装的DioHttp
-
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:clover/pages/common/intro.dart';
 class SignInScreen extends StatefulWidget {
   SignInScreen({super.key});
   @override
@@ -44,22 +47,22 @@ class _SignInScreenState extends State<SignInScreen> {
         _isLoading = true;
       });
 
-      try {
-        await signin(_username, _password);
-        await getUserInfo();
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('登录失败', style: TextStyle(color: Colors.white))),
-        );
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+    try {
+    await signin(_username, _password);
+    await getUserInfo();
+
+     Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+
+  } catch (e) {
+    TDToast.showText('登录失败', context: context);
+  } finally {
+    setState(() {
+      _isLoading = false;
+    });
+  }
     }
   }
 
@@ -139,7 +142,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           onPressed: _isLoading ? null : _handleLogin,
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
-                            backgroundColor: Colors.greenAccent, // 亮绿色按钮
+                            backgroundColor: PrimaryColor, // 亮绿色按钮
                             foregroundColor: Colors.black,
                             minimumSize: const Size(double.infinity, 48),
                             shape: const StadiumBorder(),

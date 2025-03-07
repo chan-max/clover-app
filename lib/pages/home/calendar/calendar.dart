@@ -21,11 +21,13 @@ class _DayRecordPageState extends State<DayRecordPage> {
     _selectedRecords = {}; // 存储每一天的数据
 
     // 默认获取今天的记录数据
-    _fetchDayRecord(_selectedDay);
+    // _fetchDayRecord(_selectedDay);
   }
 
   // 获取并展示当天的数据
   Future<void> _fetchDayRecord(DateTime date) async {
+
+    return null;
     final String formattedDate = "${date.year}-${date.month}-${date.day}";
     final records = await getDayrecord(datekey: formattedDate); // 获取数据
 
