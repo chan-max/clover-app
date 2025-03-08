@@ -1,6 +1,8 @@
+import 'package:clover/common/provider.dart';
 import 'package:clover/common/style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import './signup.dart';
 import 'package:clover/pages/home.dart';
 import 'package:clover/common/api.dart'; // 导入封装的DioHttp
@@ -50,10 +52,8 @@ class _SignInScreenState extends State<SignInScreen> {
 
     try {
     await signin(_username, _password);
-    await getUserInfo();
-
+    Provider.of<AppDataProvider>(context, listen: false).fetchUserInfo();
     Get.offAndToNamed('/home');
-
   } catch (e) {
     TDToast.showText('登录失败', context: context);
   } finally {

@@ -17,8 +17,6 @@ void main() async {
     ChangeNotifierProvider(
       create: (context) => AppDataProvider(),
       child: MyApp(isLoggedIn: token != null),
-
-      
     ),
   ); // 根据 token 是否存在跳转页面
 }

@@ -1,5 +1,6 @@
 import 'package:clover/common/api.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AppDataProvider extends ChangeNotifier {
   // 用 Map 保存所有数据
@@ -23,10 +24,12 @@ class AppDataProvider extends ChangeNotifier {
   }
 
   // 模拟从 API 获取数据（例如获取 dayrecord）
-  Future<void> fetchDayRecord() async {
+  Future<void> fetchDayRecord({bool notify = true}) async {
     var response = await getDayrecord();
     _data['dayrecord'] = response;
+    if(notify){
     notifyListeners(); // 数据更新后通知所有组件
+    }
   }
 
   Future<void> fetchDayRecordLatest7() async {
@@ -35,17 +38,28 @@ class AppDataProvider extends ChangeNotifier {
     notifyListeners(); // 数据更新后通知所有组件
   }
 
-  Future<void> fetchUserInfo() async {
+  Future<void> fetchUserInfo({bool notify = true}) async {
     var response = await getUserInfo();
     _data['userInfo'] = response;
-    notifyListeners(); // 数据更新后通知所有组件
+
+      if(notify){
+        notifyListeners(); // 数据更新后通知所有组件
+    }
+    
+  if(_data['userInfo']['shouldComplete'] == 1){
+    print('应该完善信息');
+    Get.offAndToNamed('/complete');
+  }
+
+
   }
 
   // 初始化方法，调用各个数据的加载方法
   Future<void> init() async {
     await Future.wait([
-      fetchDayRecord(),
-      fetchUserInfo(),
+      fetchDayRecord(notify: false),
+      fetchUserInfo(notify: false),
     ]);
+    notifyListeners(); // 数据更新后通知所有组件
   }
 }

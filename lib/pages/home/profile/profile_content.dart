@@ -28,9 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _fetchUserInfo() async {
     try {
-      final res = await getUserInfo();
       setState(() {
-        userInfo = res;
         isLoading = false;
       });
     } catch (e) {

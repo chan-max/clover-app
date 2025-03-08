@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:clover/common/api.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart'; // 假设你有一个 API 用来更新用户信息
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:clover/common/api.dart'; // 假设你有一个 API 文件
+import 'package:clover/common/provider.dart'; // 引入 AppDataProvider
 
-class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({super.key});
+class CompleteInfoPage extends StatefulWidget {
+  const CompleteInfoPage({super.key});
 
   @override
-  _EditProfilePageState createState() => _EditProfilePageState();
+  _CompleteInfoPageState createState() => _CompleteInfoPageState();
 }
 
-class _EditProfilePageState extends State<EditProfilePage> {
+class _CompleteInfoPageState extends State<CompleteInfoPage> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _usernameController;
-  late TextEditingController _birthdayController;
   late TextEditingController _phoneController;
   late TextEditingController _emailController;
-  late String _avatarUrl;
   late int _gender; // 性别
-  final _imagePicker = ImagePicker();
   bool _isLoading = true;
 
   @override
@@ -30,8 +27,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Future<void> _fetchUserInfo() async {
     try {
-  
+      // 从 AppDataProvider 获取用户信息
+      final appDataProvider = Provider.of<AppDataProvider>(context, listen: false);
+      final userInfo = appDataProvider.getData('userInfo'); // 直接从 Provider 中获取数据
+
       setState(() {
+        _phoneController = TextEditingController(text: userInfo['phone'] ?? '');
+        _emailController = TextEditingController(text: userInfo['email'] ?? '');
+        _gender = userInfo['gender'] ?? 1; // 默认性别为男性
+        _isLoading = false;
       });
     } catch (e) {
       setState(() {
@@ -41,45 +45,33 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }
   }
 
-  Future<void> _pickImage() async {
-    final pickedFile =
-        await _imagePicker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _avatarUrl = pickedFile.path; // 你可以根据上传服务器的需求来处理
-      });
-    }
-  }
-
   Future<void> _saveProfile() async {
     if (_formKey.currentState?.validate() ?? false) {
       // 更新用户信息的API调用
       final updatedUserInfo = {
-        'birthday': _birthdayController.text,
-        'avatar': _avatarUrl,
         'phone': _phoneController.text,
         'email': _emailController.text,
         'gender': _gender,
+        'shouldComplete':0
       };
 
       try {
         final res = await updateUserInfo(updatedUserInfo); // 假设你有这个方法来更新信息
         if (res) {
           TDToast.showText('信息更新成功', context: context);
-          Navigator.pop(context);
+         await Provider.of<AppDataProvider>(context, listen: false).fetchUserInfo();
+          Get.offAndToNamed('/home');
         } else {
-               TDToast.showText('信息更新失败', context: context);
+          TDToast.showText('信息更新失败', context: context);
         }
       } catch (e) {
-          TDToast.showText('信息更新失败', context: context);
+        TDToast.showText('信息更新失败', context: context);
       }
     }
   }
 
   @override
   void dispose() {
-    _usernameController.dispose();
-    _birthdayController.dispose();
     _phoneController.dispose();
     _emailController.dispose();
     super.dispose();
@@ -92,12 +84,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
         backgroundColor: Colors.white,
         titleTextStyle:
             const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        title: const Text('编辑个人资料'),
+        title: const Text('完善个人信息'),
         iconTheme: const IconThemeData(color: Colors.grey),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, size: 20, color: Colors.grey),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false, // 禁用返回按钮
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator()) // 加载状态
@@ -107,55 +96,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 key: _formKey,
                 child: ListView(
                   children: [
-                    GestureDetector(
-                      onTap: _pickImage,
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundImage: NetworkImage(_avatarUrl),
-                        child:
-                            const Icon(Icons.camera_alt, color: Colors.white),
-                      ),
-                    ),
                     const SizedBox(height: 20),
-                    // 用户名字段不可修改
-                    TextFormField(
-                      controller: _usernameController,
-                      decoration: const InputDecoration(
-                        labelText: '用户名',
-                        hintText: '用户名不可修改',
-                        prefixIcon: Icon(Icons.person),
+                    const Text(
+                      '请完善以下信息以继续使用',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
-                      enabled: false, // 设置为不可编辑
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _birthdayController,
-                      decoration: const InputDecoration(
-                        labelText: '生日',
-                        hintText: '请选择生日',
-                        prefixIcon: Icon(Icons.calendar_today),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return '生日不能为空';
-                        }
-                        return null;
-                      },
-                      onTap: () async {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        DateTime? selectedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime.now(),
-                        );
-                        if (selectedDate != null) {
-                          setState(() {
-                            _birthdayController.text =
-                                selectedDate.toIso8601String().split('T')[0];
-                          });
-                        }
-                      },
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
@@ -221,7 +168,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ElevatedButton.icon(
                       onPressed: _saveProfile,
                       icon: const Icon(Icons.save),
-                      label: const Text('保存'),
+                      label: const Text('保存并继续'),
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),

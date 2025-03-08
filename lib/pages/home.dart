@@ -22,17 +22,19 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _pages = [
     TodayContent(),
-    TodayContent(),
-    TodayContent(),
-    TodayContent(),
+    Text('123'),
+    Text('123'),
+    Text('123'),
     ProfilePage(),
   ];
 
   @override
   void initState() {
     super.initState();
+    print('initState');
     Provider.of<AppDataProvider>(context, listen: false).init();
-    _checkIntroScreen();
+
+    // _checkIntroScreen();
   }
 
   Future<void> _checkIntroScreen() async {

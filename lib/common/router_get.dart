@@ -4,6 +4,7 @@ import 'package:clover/pages/common/intro.dart';
 import 'package:clover/pages/home.dart';
 import 'package:clover/pages/user/signin.dart';
 import 'package:clover/pages/user/signup.dart';
+import 'package:clover/pages/home/profile/complete.dart';
 class AppPage {
   static final routes = [
     GetPage(
@@ -17,5 +18,7 @@ class AppPage {
     GetPage(name: "/signin", page: () => SignInScreen()),
     GetPage(name: "/signup", page: () => SignInScreen()),
     GetPage(name: "/intro", page: () => IntroScreen()),
+    GetPage(name: "/complete", page: () => CompleteInfoPage()),
+
   ];
 }

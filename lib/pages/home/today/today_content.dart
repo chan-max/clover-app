@@ -7,11 +7,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import './bottom_input_section.dart';
 
 class TodayContent extends StatelessWidget {
-  Future<Map<String, dynamic>> _getUserInfo(BuildContext context) async {
-    final appDataProvider = Provider.of<AppDataProvider>(context, listen: true);
-    final userInfo = await appDataProvider.getData('userInfo');
-    return userInfo ?? {};
-  }
 
   void _deleteRecord(BuildContext context, String recordId) {
     showDialog(
