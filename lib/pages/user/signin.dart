@@ -152,11 +152,12 @@ class _SignInScreenState extends State<SignInScreen> {
                                   width: 24,
                                   height: 24,
                                   child: CircularProgressIndicator(
-                                    color: Colors.black,
+                                    color: Colors.white,
                                     strokeWidth: 2.0,
+                                 
                                   ),
                                 )
-                              : const Text("登录"),
+                              : const Text("登录",style: TextStyle(   fontWeight: FontWeight.bold,color: Colors.white)),
                         ),
                         const SizedBox(height: 16.0),
                         TextButton(
@@ -181,7 +182,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               children: [
                                 TextSpan(
                                   text: "快速注册",
-                                  style: TextStyle(color: Colors.greenAccent),
+                                  style: TextStyle(color: PrimaryColor),
                                 ),
                               ],
                             ),

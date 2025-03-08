@@ -130,7 +130,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     strokeWidth: 2.0,
                                   ),
                                 )
-                              : Text("快速注册"),
+                              : const Text("注册",style: TextStyle(   fontWeight: FontWeight.bold,color: Colors.white)),
                         ),
                         SizedBox(height: 16.0),
                         TextButton(
@@ -141,7 +141,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               children: [
                                 TextSpan(
                                   text: "去登录",
-                                  style: TextStyle(color: Colors.greenAccent[400]),
+                                  style: TextStyle(color: PrimaryColor),
                                 ),
                               ],
                             ),
