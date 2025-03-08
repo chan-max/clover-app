@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 class AppDataProvider extends ChangeNotifier {
   // 用 Map 保存所有数据
   Map<String, dynamic> _data = {
-    'dayrecord': {},
+
+    'dayrecord': {}, // 今日记录
     'dayrecordLatest7': [],
     // 更多的数据字段
-    'userInfo': {},
+    'userInfo': {}, // 用户信息
   };
 
   // 获取指定数据
@@ -42,8 +43,9 @@ class AppDataProvider extends ChangeNotifier {
 
   // 初始化方法，调用各个数据的加载方法
   Future<void> init() async {
-    await fetchDayRecord();
-    await fetchUserInfo();
-    // await fetchSettings();
+    await Future.wait([
+      fetchDayRecord(),
+      fetchUserInfo(),
+    ]);
   }
 }
