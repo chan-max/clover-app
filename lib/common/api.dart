@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:clover/pages/user/signin.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:clover/common/storage.dart';
 // 导入 dart:io 以便处理证书相关内容
@@ -76,15 +77,11 @@ class DioHttp {
           // 提示用户身份过期
           final context = navigatorKey.currentState?.context;
           if (context != null) {
-
-            TDToast.showText('用户身份过期，请重新登录', context: context);
+            // TDToast.showText('用户身份过期，请重新登录', context: context);
           }
 
-          // 跳转到登录页面
-          navigatorKey.currentState?.pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => SignInScreen()),
-            (route) => false,
-          );
+           Get.offAndToNamed('/signin');
+         
         }
 
         return handler.next(response); // 继续后续操作
@@ -102,14 +99,11 @@ class DioHttp {
           // 提示用户身份过期
           final context = navigatorKey.currentState?.context;
           if (context != null) {
-             TDToast.showText('用户身份过期，请重新登录', context: context);
+            //  TDToast.showText('用户身份过期，请重新登录', context: context);
           }
 
           // 跳转到登录页面
-          navigatorKey.currentState?.pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => SignInScreen()),
-            (route) => false,
-          );
+          Get.offAndToNamed('/signin');
         }
 
         return handler
