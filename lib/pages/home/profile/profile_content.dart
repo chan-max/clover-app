@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:floating_bubbles/floating_bubbles.dart';
-import 'package:word_cloud/word_cloud_data.dart';
-import 'package:word_cloud/word_cloud_shape.dart';
-import 'package:word_cloud/word_cloud_tap.dart';
-import 'package:word_cloud/word_cloud_tap_view.dart';
-import 'package:word_cloud/word_cloud_view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import 'package:clover/common/provider.dart';
 import 'package:clover/pages/user/signin.dart';
-import 'package:clover/common/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './update.dart';
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -29,6 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> _fetchUserInfo() async {
     try {
       setState(() {
+        userInfo = Provider.of<AppDataProvider>(context, listen: false).getData('userInfo');
         isLoading = false;
       });
     } catch (e) {
@@ -69,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Scaffold(
-              backgroundColor: Color(0xffffffff),
+              backgroundColor: Colors.black, // 整体背景设置为黑色
               body: Column(
                 children: [
                   Expanded(flex: 2, child: _TopPortion(userInfo: userInfo)),
@@ -84,15 +81,16 @@ class _ProfilePageState extends State<ProfilePage> {
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineSmall
-                                ?.copyWith(fontWeight: FontWeight.bold),
+                                ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white), // 文字颜色为白色
                           ),
                           TextButton.icon(
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      EditProfilePage(),
+                                  builder: (context) => EditProfilePage(),
                                 ),
                               );
                             },
@@ -100,7 +98,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               '编辑信息',
                               style: TextStyle(
                                 fontWeight: FontWeight.normal,
-                                color: Colors.grey,
+                                color: Colors.grey, // 文字颜色为灰色
                                 fontSize: 12.0,
                               ),
                             ),
@@ -172,12 +170,16 @@ class _ProfileInfoRow extends StatelessWidget {
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
+                color: Colors.white, // 文字颜色为白色
               ),
             ),
           ),
           Text(
             item.title,
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(color: Colors.grey), // 文字颜色为灰色
           )
         ],
       );
@@ -211,44 +213,22 @@ class _TopPortion extends StatelessWidget {
       {'word': '不知道啊', 'value': 25},
     ];
 
-    WordCloudData wcData = WordCloudData(
-      data: wordList,
-      // minSize: 8.0, // 设置最小字体大小
-      // maxSize: 20.0, // 设置最大字体大小
-    );
-
     return Stack(
       fit: StackFit.expand,
       children: [
-        // 这个背景放在最底层
+        // 深色渐变背景
         Container(
           margin: const EdgeInsets.only(bottom: 50),
           decoration: const BoxDecoration(
               gradient: LinearGradient(
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
-                  colors: [Color(0x6678ffd6), Color(0xccffffff)]),
+                  colors: [Color(0xFF1E1E1E), Color(0xFF121212)]), // 深色渐变
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(50),
                 bottomRight: Radius.circular(50),
               )),
         ),
-        // 词云效果放在最底层
-        // Positioned(
-        //   top: 50,
-        //   left: 0,
-        //   right: 0,
-        //   child: WordCloudView(
-        //     data: wcData,
-        //     mapcolor: Colors.transparent,
-        //     mapwidth: MediaQuery.of(context).size.width,
-        //     mapheight: 250,
-        //     fontWeight: FontWeight.bold,
-        //     colorlist: [Colors.grey, Colors.blueAccent, Colors.redAccent],
-        //     // minFontSize: 8.0, // 设置最小字体大小
-        //     // maxFontSize: 20.0, // 设置最大字体大小
-        //   ),
-        // ),
         // 顶部操作按钮（设置、编辑等）
         Positioned(
           left: 16,
@@ -314,7 +294,7 @@ class _TopPortion extends StatelessWidget {
                   right: 0,
                   child: CircleAvatar(
                     radius: 20,
-                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    backgroundColor: Colors.black, // 背景为黑色
                     child: Container(
                       margin: const EdgeInsets.all(8.0),
                       decoration: const BoxDecoration(

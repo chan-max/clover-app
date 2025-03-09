@@ -19,6 +19,7 @@ class HealthScoreCard extends StatelessWidget {
             blurRadius: 8,
             spreadRadius: 0,
           ),
+          
         ],
       ),
       child: Padding(

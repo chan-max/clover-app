@@ -158,9 +158,9 @@ class _BottomInputSectionState extends State<BottomInputSection>
                     controller: _controller,
                     focusNode: _focusNode, // 使用 FocusNode
                     enabled: _isInputVisible, // 如果输入框已显示，则启用输入
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white,fontSize: 11,),
                     decoration: InputDecoration(
-                      hintText: '添加记录...',
+                      hintText: '记录一下',
                       hintStyle: TextStyle(color: Colors.grey[500]),
                       filled: true,
                       fillColor: Colors.grey[900],

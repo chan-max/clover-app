@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
     Text('123'),
     Text('123'),
     Text('123'),
-    ProfilePage(),
+    // ProfilePage(),
   ];
 
   @override
@@ -100,10 +100,10 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.settings),
             label: '设置',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '个人中心',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.person),
+          //   label: '个人中心',
+          // ),
         ],
         selectedLabelStyle: const TextStyle(
           color: Color(0xFFFFFFFF),

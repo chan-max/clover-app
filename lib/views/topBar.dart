@@ -11,10 +11,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
    
     final userInfo = Provider.of<AppDataProvider>(context, listen: true)
         .getData('userInfo');
-   
-    final dynamic coins = userInfo['coin'] ?? '--'; // 获取时光币数，默认为 0
 
-    final name = userInfo['username'] ?? '--'; 
+
+    final dynamic coins = userInfo?['coin'] ?? '--'; // 获取时光币数，默认为 0
+
+    final name = userInfo?['username'] ?? '--'; 
 
     return AppBar(
       backgroundColor: const Color(0xFF000000),
@@ -52,15 +53,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 children: [
                   Image.asset(
                     'assets/img/coin.png',
-                    width: 24,
-                    height: 24,
+                    width: 20,
+                    height: 20,
                   ),
                   const SizedBox(width: 4),
                   Text(
                     _formatCoins(coins),
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 14,
+                      fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
