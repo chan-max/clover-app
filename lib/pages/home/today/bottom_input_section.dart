@@ -5,6 +5,9 @@ import '/common/provider.dart';
 import '/common/api.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import 'package:flutter/material.dart';
+import 'dart:math' as math;
+
 class WordCloud extends StatelessWidget {
   final List<String> sentences;
   final Function(String) onSentenceTap;
@@ -19,9 +22,9 @@ class WordCloud extends StatelessWidget {
         spacing: 8.0, // 句子之间的水平间距
         runSpacing: 8.0, // 句子之间的垂直间距
         children: sentences.map((sentence) {
-          return GestureDetector(
+          return AnimatedWordItem(
+            sentence: sentence,
             onTap: () => onSentenceTap(sentence),
-            child: _SentenceItem(sentence: sentence), // 使用自定义组件
           );
         }).toList(),
       ),
@@ -29,38 +32,162 @@ class WordCloud extends StatelessWidget {
   }
 }
 
-// 自定义句子组件，用于添加点击效果
-class _SentenceItem extends StatefulWidget {
+// 带动画的词项组件
+class AnimatedWordItem extends StatefulWidget {
+  final String sentence;
+  final VoidCallback onTap;
+
+  const AnimatedWordItem({required this.sentence, required this.onTap});
+
+  @override
+  _AnimatedWordItemState createState() => _AnimatedWordItemState();
+}
+
+class _AnimatedWordItemState extends State<AnimatedWordItem>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _opacityAnimation;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 初始化动画控制器
+    _controller = AnimationController(
+      duration: Duration(milliseconds: 500), // 动画时长 500ms
+      vsync: this,
+    );
+
+    // 透明度动画：从 0 到 1
+    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    // 缩放动画：从 0.5 到 1
+    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    // 随机延迟启动动画
+    Future.delayed(Duration(milliseconds: (500 * math.Random().nextDouble()).toInt()), () {
+      if (mounted) {
+        _controller.forward();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose(); // 释放动画控制器
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Opacity(
+            opacity: _opacityAnimation.value, // 透明度
+            child: Transform.scale(
+              scale: _scaleAnimation.value, // 缩放
+              child: child,
+            ),
+          );
+        },
+        child: _SentenceItem(sentence: widget.sentence), // 自定义词项组件
+      ),
+    );
+  }
+}
+
+// 自定义词项组件
+class _SentenceItem extends StatelessWidget {
   final String sentence;
 
   const _SentenceItem({required this.sentence});
 
   @override
-  __SentenceItemState createState() => __SentenceItemState();
-}
-
-class __SentenceItemState extends State<_SentenceItem> {
-  bool _isPressed = false; // 是否按下
-
-  @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 100), // 动画效果
+    return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
       decoration: BoxDecoration(
-        color: _isPressed ? Colors.grey[600] : Colors.transparent, // 按下时背景色变化
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Text(
-        widget.sentence,
+        sentence,
         style: TextStyle(
-          color: _isPressed ? Colors.grey[300] : Colors.white, // 按下时文字颜色变化
-          fontSize: 12.0, // 固定文字大小为 12px
+          color: Colors.white,
+          fontSize: 12.0,
           fontWeight: FontWeight.bold,
         ),
       ),
     );
   }
+}
+
+class Category {
+  final String label;
+  final Color color;
+
+  Category({required this.label, required this.color});
+}
+final List<Category> categories = [
+  Category(label: '生活', color: Color.fromARGB(128, 0, 0, 255)), // 50% 透明度的蓝色
+  Category(label: '睡眠', color: Color.fromARGB(128, 128, 0, 128)), // 50% 透明度的紫色
+  Category(label: '工作', color: Color.fromARGB(128, 0, 128, 0)), // 50% 透明度的绿色
+  Category(label: '学习', color: Color.fromARGB(128, 255, 165, 0)), // 50% 透明度的橙色
+  Category(label: '饮食', color: Color.fromARGB(128, 255, 0, 0)), // 50% 透明度的红色
+  Category(label: '运动', color: Color.fromARGB(128, 0, 128, 128)), // 50% 透明度的青色
+  Category(label: '娱乐', color: Color.fromARGB(128, 255, 192, 203)), // 50% 透明度的粉色
+  Category(label: '旅行', color: Color.fromARGB(128, 75, 0, 130)), // 50% 透明度的靛蓝色
+  Category(label: '购物', color: Color.fromARGB(128, 255, 193, 7)), // 50% 透明度的琥珀色
+  Category(label: '健康', color: Color.fromARGB(128, 0, 255, 255)), // 50% 透明度的青色
+  Category(label: '心情', color: Color.fromARGB(128, 0, 255, 0)), // 50% 透明度的酸橙色
+  Category(label: '社交', color: Color.fromARGB(128, 165, 42, 42)), // 50% 透明度的棕色
+  Category(label: '家庭', color: Color.fromARGB(128, 255, 140, 0)), // 50% 透明度的深橙色
+  Category(label: '宠物', color: Color.fromARGB(128, 96, 125, 139)), // 50% 透明度的蓝灰色
+  Category(label: '其他', color: Color.fromARGB(128, 128, 128, 128)), // 50% 透明度的灰色
+];
+
+List<Widget> _buildCategoryTabs() {
+  return categories.map((category) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 4), // 标签之间的间距
+      child: GestureDetector(
+        onTap: () {
+          // 处理分类标签点击事件
+          print('点击了分类: ${category.label}');
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+          decoration: BoxDecoration(
+            color: category.color, // 使用分类的颜色
+            borderRadius: BorderRadius.circular(20), // 圆角
+          ),
+          alignment: Alignment.center, // 文字水平居中
+          child: Text(
+            category.label,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }).toList();
 }
 
 class BottomInputSection extends StatefulWidget {
@@ -211,50 +338,67 @@ class _BottomInputSectionState extends State<BottomInputSection>
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (_isInputVisible)
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: IconButton(
-                            icon: Icon(Icons.close, color: Colors.white),
-                            onPressed: _closeInputSection,
-                          ),
-                        ),
-                        // 添加词云组件
-                        WordCloud(
-                          sentences: sentences,
-                          onSentenceTap: _onSentenceTap,
-                        ),
-                      ],
-                    ),
-                  ),
-                SizedBox(height: 6),
+            Container(
+  padding: EdgeInsets.symmetric(vertical: 16.0),
+  decoration: BoxDecoration(
+    color: Colors.black,
+    borderRadius: BorderRadius.circular(12),
+  ),
+  child: Column(
+    children: [
+      // 关闭按钮
+      Align(
+        alignment: Alignment.topRight,
+        child: IconButton(
+          icon: Icon(Icons.close, color: Colors.white),
+          onPressed: _closeInputSection,
+        ),
+      ),
+
+      // 词云组件
+      WordCloud(
+        sentences: sentences,
+        onSentenceTap: _onSentenceTap,
+      ),
+
+      // 分类标签
+      SizedBox(height: 12), // 添加间距
+            Container(
+              height: 32, // 分类标签的高度
+              child: ListView(
+                scrollDirection: Axis.horizontal, // 水平滚动
+                children: [
+                  SizedBox(width: 4), // 左侧留白
+                  ..._buildCategoryTabs(), // 生成分类标签
+                  SizedBox(width: 4), // 右侧留白
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+                SizedBox(height: 4),
                 GestureDetector(
                   onTap: _showInputSection,
-                  child: TextField(
-                    controller: _controller,
-                    focusNode: _focusNode,
-                    enabled: _isInputVisible,
-                    style: TextStyle(color: Colors.white, fontSize: 11),
-                    decoration: InputDecoration(
-                      hintText: '记录一下',
-                      hintStyle: TextStyle(color: Colors.grey[500]),
-                      filled: true,
-                      fillColor: Colors.grey[900],
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    ),
-                  ),
+            child: TextField(
+  controller: _controller,
+  focusNode: _focusNode,
+  enabled: _isInputVisible,
+  style: TextStyle(color: Colors.white, fontSize: 11),
+  maxLines: 5, // 设置为多行输入框
+  minLines: 2, // 最小显示 3 行
+  decoration: InputDecoration(
+    hintText: '记录一下',
+    hintStyle: TextStyle(color: Colors.grey[500]),
+    filled: true,
+    fillColor: Colors.grey[900],
+    border: OutlineInputBorder(
+      borderSide: BorderSide.none,
+      borderRadius: BorderRadius.circular(12),
+    ),
+    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12), // 调整内边距
+  ),
+),
                 ),
                 if (_isInputVisible)
                   SlideTransition(
@@ -267,12 +411,12 @@ class _BottomInputSectionState extends State<BottomInputSection>
                           children: [
                             SizedBox(width: 4),
                             Expanded(
-                              child: Row(
-                                children: [
-                                  Icon(Icons.photo_camera, color: Colors.white),
-                                  SizedBox(width: 8),
-                                  Icon(Icons.attach_file, color: Colors.white),
-                                ],
+                              child: Text(
+                                '每次记录消耗一枚时光币',
+                                style: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontSize: 10,
+                                ),
                               ),
                             ),
                             SizedBox(
