@@ -1,39 +1,30 @@
 {
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
-      {
-        "name": "everyday4",
-        "request": "launch",
-        "type": "dart",
-        "program": "lib/main.dart",
-        "args": [
-          "--web-hostname=0.0.0.0",    // 绑定到所有网络接口
-          "--web-port=1234"             // 使用端口 8000
-        ]
-      },
-      {
-        "name": "everyday (profile mode)",
-        "request": "launch",
-        "type": "dart",
-        "mode": "profile",               // 修改为 "mode"
-        "program": "lib/main.dart",
-        "args": [
-          "--web-hostname=0.0.0.0",    // 绑定到所有网络接口
-          "--web-port=8000"             // 使用端口 8000
-        ]
-      },
-      {
-        "name": "everyday (release mode)",
-        "request": "launch",
-        "type": "dart",
-        "mode": "release",               // 修改为 "mode"
-        "program": "lib/main.dart",
-        "args": [
-          "--web-hostname=0.0.0.0",    // 绑定到所有网络接口
-          "--web-port=8000"             // 使用端口 8000
-        ]
-      }
+        {
+            "name": "everyday",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--web-bind-address=0.0.0.0",
+                "--web-port=1234"
+              ]
+        },
+        {
+            "name": "everyday (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "everyday (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
     ]
-  }
-  
+}
+

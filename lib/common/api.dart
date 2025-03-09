@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:clover/pages/user/signin.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:clover/common/storage.dart';
 // 导入 dart:io 以便处理证书相关内容
 import 'package:uuid/uuid.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:flutter/foundation.dart';
 
 // 定义一个全局的 NavigatorKey
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -112,13 +114,18 @@ class DioHttp {
     ));
 
     // 配置 HttpClientAdapter 以忽略 SSL 证书验证
-    // (_dio.httpClientAdapter as dynamic).onHttpClientCreate = (client) {
-    //   client.badCertificateCallback =
-    //       (X509Certificate cert, String host, int port) {
-    //     // 忽略证书验证
-    //     return true;
-    //   };
-    // };
+
+      if (kIsWeb) {
+        } else {
+    // 在移动端禁用证书验证
+          (_dio.httpClientAdapter as dynamic).onHttpClientCreate = (client) {
+            client.badCertificateCallback =
+                (X509Certificate cert, String host, int port) {
+              return true; // 忽略证书验证
+            };
+    };
+  }
+
   }
 
   // GET 请求

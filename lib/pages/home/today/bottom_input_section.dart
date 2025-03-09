@@ -114,7 +114,7 @@ class _BottomInputSectionState extends State<BottomInputSection>
           alignment: Alignment.bottomCenter,
           child: AnimatedContainer(
             duration: Duration(milliseconds: 300),
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
             color: Colors.transparent,
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -133,7 +133,7 @@ class _BottomInputSectionState extends State<BottomInputSection>
                         child: Column(
                           children: [
                             // 空白区域，后续可以添加内容
-                            SizedBox(height: 16), // 留出空白区域
+                            SizedBox(height: 6), // 留出空白区域
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -151,7 +151,7 @@ class _BottomInputSectionState extends State<BottomInputSection>
                       ),
                     ),
                   ),
-                SizedBox(height: 16),
+                SizedBox(height: 6),
                 GestureDetector(
                   onTap: _showInputSection, // 点击输入框时显示按钮
                   child: TextField(
@@ -169,7 +169,7 @@ class _BottomInputSectionState extends State<BottomInputSection>
                         borderRadius: BorderRadius.circular(12),
                       ),
                       contentPadding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     ),
                   ),
                 ),
@@ -179,10 +179,11 @@ class _BottomInputSectionState extends State<BottomInputSection>
                     child: FadeTransition(
                       opacity: _animationController,
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 16.0, bottom: 16.0), // 增加底部间距
+                        padding: const EdgeInsets.only(top: 6.0, bottom: 6.0), // 增加底部间距
                         child: Row(
                           children: [
                             // 左侧的其他内容
+                            SizedBox(width: 4,),
                             Expanded(
                               child: Row(
                                 children: [
@@ -193,21 +194,29 @@ class _BottomInputSectionState extends State<BottomInputSection>
                               ),
                             ),
                             // 保存记录按钮
-                            SizedBox(
-                              width: 120, // 按钮宽度变小
-                              child: ElevatedButton(
-                                onPressed: _addRecord, // 调用保存方法
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.greenAccent,
-                                  foregroundColor: Colors.black,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20), // 圆角
-                                  ),
-                                  padding: EdgeInsets.symmetric(vertical: 12.0), // 按钮高度变小
-                                ),
-                                child: Text("保存记录"),
-                              ),
-                            ),
+             SizedBox(
+  height: 32,
+  width: 72, // 限制高度
+  child: ElevatedButton(
+    onPressed: _addRecord,
+    style: ElevatedButton.styleFrom(
+      backgroundColor: Colors.greenAccent,
+      foregroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: EdgeInsets.zero, // 去掉内边距
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap, // 让点击区域紧贴按钮
+    ),
+    child: Text(
+      "保存记录",
+      style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+    ),
+  ),
+)
+
+
+
                           ],
                         ),
                       ),

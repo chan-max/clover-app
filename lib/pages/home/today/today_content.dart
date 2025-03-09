@@ -96,6 +96,7 @@ class TodayContent extends StatelessWidget {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset:false,
       backgroundColor: Color(0xFF000000),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

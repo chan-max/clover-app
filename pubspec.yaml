@@ -62,7 +62,7 @@ flutter_native_splash:
 
   # Android 12 适配
   android_12:
-    color: '#ffffff'
+    color: '#000000'
     image: assets/splash.png # 仍然使用相同的 splash.png
 
   # 让图片充满全屏
