@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:clover/pages/user/signin.dart';
 import 'package:dio/dio.dart';
@@ -83,8 +84,17 @@ class DioHttp {
           }
 
            Get.offAndToNamed('/signin');
-         
         }
+
+        if (response?.data['code'] == 500) {
+          return handler.reject( DioException(
+        requestOptions: response.requestOptions,
+        response: response,
+        type: DioExceptionType.badResponse,
+        error: '服务器内部错误',
+      ),);
+        }
+        
 
         return handler.next(response); // 继续后续操作
       },
@@ -238,7 +248,6 @@ Future<void> addDayRecordDetail(String? date, Map<String, dynamic> post) async {
   try {
     // 初始化 UUID 生成器
     final uuid = Uuid();
-
     // 构造请求数据
     post = {
       "createTime": DateTime.now().toIso8601String(),
@@ -253,7 +262,6 @@ Future<void> addDayRecordDetail(String? date, Map<String, dynamic> post) async {
 
     // 发起 POST 请求
     final response = await dioHttp.post(url, data: post);
-
     return response['data'];
   } catch (e) {
     throw Exception(e);
