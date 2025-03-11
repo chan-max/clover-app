@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '/common/provider.dart';
 import '/common/api.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-import './bottom_input_section.dart';
+import './bottom_input_section/bottom_input_section.dart';
 import './top_menu.dart'; // 引入功能区组件
 
 class TodayContent extends StatelessWidget {
@@ -87,6 +87,154 @@ class TodayContent extends StatelessWidget {
     );
   }
 
+  void _showRecordDetails(BuildContext context, Map<String, dynamic> record) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true, // 允许高度根据内容扩展
+    backgroundColor: Colors.transparent, // 背景透明
+    builder: (BuildContext context) {
+      return Container(
+        height: MediaQuery.of(context).size.height * 0.75, // 弹层高度为屏幕高度的 75%
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.black87, Colors.black54], // 渐变背景
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), // 顶部圆角
+            topRight: Radius.circular(20),
+          ),
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16), // 内边距
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // 拖动条
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[700], // 拖动条颜色
+                  borderRadius: BorderRadius.circular(2), // 圆角
+                ),
+              ),
+            ),
+            SizedBox(height: 20), // 间距
+            // 记录详情标题
+            Text(
+              '记录详情',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 20), // 间距
+            // 记录内容
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 时间
+                    Text(
+                      '时间: ${record['createTime'] ?? '未知时间'}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white70,
+                      ),
+                    ),
+                    SizedBox(height: 12), // 间距
+                    // 内容
+                    Text(
+                      '内容: ${record['content'] ?? '无内容'}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white70,
+                      ),
+                    ),
+                    SizedBox(height: 12), // 间距
+                    // 根据类型显示额外信息
+                    if (record['type'] == 'sleep')
+                      Text(
+                        '睡眠质量: ${record['quality'] ?? '未知'}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    if (record['type'] == 'mood')
+                      Text(
+                        '心情指数: ${record['moodLevel'] ?? '未知'}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    if (record['type'] == 'diet')
+                      Text(
+                        '饮食情况: ${record['mealDetails'] ?? '未知'}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    if (record['type'] == 'exercise')
+                      Text(
+                        '运动时长: ${record['duration'] ?? '未知'}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    if (record['type'] == 'fragment')
+                      Text(
+                        '碎片: ${record['duration'] ?? '未知'}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white70,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 12), // 间距
+            // 操作按钮
+  // 操作按钮
+Padding(
+  padding: EdgeInsets.symmetric(horizontal: 4), // 左右留出 20 的间距
+  child: SizedBox(
+    width: double.infinity, // 宽度占满
+    child: ElevatedButton(
+      onPressed: () => Navigator.pop(context), // 关闭弹层
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.redAccent, // 按钮背景色
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12), // 圆角
+        ),
+        padding: EdgeInsets.symmetric(vertical: 14), // 内边距
+      ),
+      child: Text(
+        '关闭',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
+      ),
+    ),
+  ),
+),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+
   @override
   Widget build(BuildContext context) {
     final appDataProvider = Provider.of<AppDataProvider>(context);
@@ -104,20 +252,20 @@ class TodayContent extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // 功能区
-          TopMenu(
-            onButton1Pressed: () {
-              // 跳转到页面1
-              Navigator.pushNamed(context, '/page1');
-            },
-            onButton2Pressed: () {
-              // 跳转到页面2
-              Navigator.pushNamed(context, '/page2');
-            },
-            onButton3Pressed: () {
-              // 跳转到页面3
-              Navigator.pushNamed(context, '/page3');
-            },
-          ),
+          // TopMenu(
+          //   onButton1Pressed: () {
+          //     // 跳转到页面1
+          //     Navigator.pushNamed(context, '/page1');
+          //   },
+          //   onButton2Pressed: () {
+          //     // 跳转到页面2
+          //     Navigator.pushNamed(context, '/page2');
+          //   },
+          //   onButton3Pressed: () {
+          //     // 跳转到页面3
+          //     Navigator.pushNamed(context, '/page3');
+          //   },
+          // ),
           SizedBox(height: 16), // 添加间距
           Expanded(
             child: Stack(
@@ -179,10 +327,6 @@ class TodayContent extends StatelessWidget {
                     builder: (context, appDataProvider, child) {
                       var dayRecord = appDataProvider.getData('dayrecord');
                       List<Map<String, dynamic>> records = [];
-
-                      // if (dayRecord['record'] != null) {
-                      //   records = List<Map<String, dynamic>>.from(dayRecord['record']);
-                      // }
 
                       if (dayRecord['record'] != null) {
                         records = List<Map<String, dynamic>>.from(dayRecord['record']).reversed.toList();
@@ -278,55 +422,60 @@ class TodayContent extends StatelessWidget {
                                     customContent = SizedBox();
                                 }
 
-                                return Container(
-                                  margin: EdgeInsets.only(bottom: 8), // 缩小间距
-                                  padding: EdgeInsets.all(12), // 缩小内边距
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFF1A1A1A),
-                                    borderRadius: BorderRadius.circular(12),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.3),
-                                        offset: Offset(0, 4),
-                                        blurRadius: 8,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              formattedTime,
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: Color(0xFF888888),
-                                              ),
-                                            ),
-                                            SizedBox(height: 4), // 缩小间距
-                                            Text(
-                                              record['content'] ?? '无内容',
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Color(0xFFFFFFFF), // 内容文字为白色
-                                              ),
-                                            ),
-                                            SizedBox(height: 4), // 缩小间距
-                                            customContent,
-                                          ],
+                                return GestureDetector(
+                                  onTap: () {
+                                    _showRecordDetails(context, record);
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(bottom: 6), // 缩小间距
+                                    padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12), // 缩小内边距
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF1A1A1A),
+                                      borderRadius: BorderRadius.circular(12),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.3),
+                                          offset: Offset(0, 4),
+                                          blurRadius: 8,
                                         ),
-                                      ),
-                                      IconButton(
-                                        icon: Icon(Icons.delete, color: Color(0x66ff0000)), // 删除按钮颜色改为浅灰色
-                                        iconSize: 20, // 缩小图标大小
-                                        onPressed: () {
-                                          _deleteRecord(context, record['id']);
-                                        },
-                                      ),
-                                    ],
+                                      ],
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                formattedTime,
+                                                style: TextStyle(
+                                                  fontSize: 11,
+                                                  color: Color(0xFF888888),
+                                                ),
+                                              ),
+                                              SizedBox(height: 4), // 缩小间距
+                                              Text(
+                                                record['content'] ?? '无内容',
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xFFFFFFFF), // 内容文字为白色
+                                                ),
+                                              ),
+                                              SizedBox(height: 4), // 缩小间距
+                                              customContent,
+                                            ],
+                                          ),
+                                        ),
+                                        IconButton(
+                                          icon: Icon(Icons.delete, color: Color(0x66ff0000)), // 删除按钮颜色改为浅灰色
+                                          iconSize: 20, // 缩小图标大小
+                                          onPressed: () {
+                                            _deleteRecord(context, record['id']);
+                                          },
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 );
                               }).toList(),

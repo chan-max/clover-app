@@ -142,53 +142,6 @@ class Category {
 
   Category({required this.label, required this.color});
 }
-final List<Category> categories = [
-  Category(label: '生活', color: Color.fromARGB(128, 0, 0, 255)), // 50% 透明度的蓝色
-  Category(label: '睡眠', color: Color.fromARGB(128, 128, 0, 128)), // 50% 透明度的紫色
-  Category(label: '工作', color: Color.fromARGB(128, 0, 128, 0)), // 50% 透明度的绿色
-  Category(label: '学习', color: Color.fromARGB(128, 255, 165, 0)), // 50% 透明度的橙色
-  Category(label: '饮食', color: Color.fromARGB(128, 255, 0, 0)), // 50% 透明度的红色
-  Category(label: '运动', color: Color.fromARGB(128, 0, 128, 128)), // 50% 透明度的青色
-  Category(label: '娱乐', color: Color.fromARGB(128, 255, 192, 203)), // 50% 透明度的粉色
-  Category(label: '旅行', color: Color.fromARGB(128, 75, 0, 130)), // 50% 透明度的靛蓝色
-  Category(label: '购物', color: Color.fromARGB(128, 255, 193, 7)), // 50% 透明度的琥珀色
-  Category(label: '健康', color: Color.fromARGB(128, 0, 255, 255)), // 50% 透明度的青色
-  Category(label: '心情', color: Color.fromARGB(128, 0, 255, 0)), // 50% 透明度的酸橙色
-  Category(label: '社交', color: Color.fromARGB(128, 165, 42, 42)), // 50% 透明度的棕色
-  Category(label: '家庭', color: Color.fromARGB(128, 255, 140, 0)), // 50% 透明度的深橙色
-  Category(label: '宠物', color: Color.fromARGB(128, 96, 125, 139)), // 50% 透明度的蓝灰色
-  Category(label: '其他', color: Color.fromARGB(128, 128, 128, 128)), // 50% 透明度的灰色
-];
-
-List<Widget> _buildCategoryTabs() {
-  return categories.map((category) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4), // 标签之间的间距
-      child: GestureDetector(
-        onTap: () {
-          // 处理分类标签点击事件
-          print('点击了分类: ${category.label}');
-        },
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-          decoration: BoxDecoration(
-            color: category.color, // 使用分类的颜色
-            borderRadius: BorderRadius.circular(20), // 圆角
-          ),
-          alignment: Alignment.center, // 文字水平居中
-          child: Text(
-            category.label,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-    );
-  }).toList();
-}
 
 class BottomInputSection extends StatefulWidget {
   @override
@@ -205,7 +158,7 @@ class _BottomInputSectionState extends State<BottomInputSection>
   late Animation<Offset> _slideAnimation;
 
   // 维护一个句子数组
-  final List<String> sentences = [
+  List<String> sentences = [
     "今天心情很好",
     "工作有点累",
     "学习新知识很有趣",
@@ -226,6 +179,25 @@ class _BottomInputSectionState extends State<BottomInputSection>
     "尝试了一道新菜",
     "听了一首喜欢的歌",
     "今天早睡早起",
+  ];
+
+  // 维护一个分类数组
+  List<Category> categories = [
+    Category(label: '生活', color: Color.fromARGB(128, 0, 0, 255)), // 50% 透明度的蓝色
+    Category(label: '睡眠', color: Color.fromARGB(128, 128, 0, 128)), // 50% 透明度的紫色
+    Category(label: '工作', color: Color.fromARGB(128, 0, 128, 0)), // 50% 透明度的绿色
+    Category(label: '学习', color: Color.fromARGB(128, 255, 165, 0)), // 50% 透明度的橙色
+    Category(label: '饮食', color: Color.fromARGB(128, 255, 0, 0)), // 50% 透明度的红色
+    Category(label: '运动', color: Color.fromARGB(128, 0, 128, 128)), // 50% 透明度的青色
+    Category(label: '娱乐', color: Color.fromARGB(128, 255, 192, 203)), // 50% 透明度的粉色
+    Category(label: '旅行', color: Color.fromARGB(128, 75, 0, 130)), // 50% 透明度的靛蓝色
+    Category(label: '购物', color: Color.fromARGB(128, 255, 193, 7)), // 50% 透明度的琥珀色
+    Category(label: '健康', color: Color.fromARGB(128, 0, 255, 255)), // 50% 透明度的青色
+    Category(label: '心情', color: Color.fromARGB(128, 0, 255, 0)), // 50% 透明度的酸橙色
+    Category(label: '社交', color: Color.fromARGB(128, 165, 42, 42)), // 50% 透明度的棕色
+    Category(label: '家庭', color: Color.fromARGB(128, 255, 140, 0)), // 50% 透明度的深橙色
+    Category(label: '宠物', color: Color.fromARGB(128, 96, 125, 139)), // 50% 透明度的蓝灰色
+    Category(label: '其他', color: Color.fromARGB(128, 128, 128, 128)), // 50% 透明度的灰色
   ];
 
   @override
@@ -314,6 +286,37 @@ class _BottomInputSectionState extends State<BottomInputSection>
     _focusNode.requestFocus();
   }
 
+  // 刷新词云内容
+  void _refreshWordCloud() {
+    setState(() {
+      sentences = [
+        "新的句子1",
+        "新的句子2",
+        "新的句子3",
+        "新的句子4",
+        "新的句子5",
+        "新的句子6",
+        "新的句子7",
+        "新的句子8",
+        "新的句子9",
+        "新的句子10",
+      ]..shuffle(); // 随机打乱顺序
+    });
+  }
+
+  // 刷新分类内容
+  void _refreshCategories() {
+    setState(() {
+      categories = [
+        Category(label: '新分类1', color: Color.fromARGB(128, 0, 0, 255)),
+        Category(label: '新分类2', color: Color.fromARGB(128, 128, 0, 128)),
+        Category(label: '新分类3', color: Color.fromARGB(128, 0, 128, 0)),
+        Category(label: '新分类4', color: Color.fromARGB(128, 255, 165, 0)),
+        Category(label: '新分类5', color: Color.fromARGB(128, 255, 0, 0)),
+      ]..shuffle(); // 随机打乱顺序
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -338,67 +341,124 @@ class _BottomInputSectionState extends State<BottomInputSection>
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (_isInputVisible)
-            Container(
-  padding: EdgeInsets.symmetric(vertical: 16.0),
-  decoration: BoxDecoration(
-    color: Colors.black,
-    borderRadius: BorderRadius.circular(12),
-  ),
-  child: Column(
-    children: [
-      // 关闭按钮
-      Align(
-        alignment: Alignment.topRight,
-        child: IconButton(
-          icon: Icon(Icons.close, color: Colors.white),
-          onPressed: _closeInputSection,
-        ),
-      ),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      children: [
+                        // 关闭按钮和刷新按钮
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.refresh, color: Colors.white),
+                              onPressed: _refreshWordCloud,
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.close, color: Colors.white),
+                              onPressed: _closeInputSection,
+                            ),
+                          ],
+                        ),
 
-      // 词云组件
-      WordCloud(
-        sentences: sentences,
-        onSentenceTap: _onSentenceTap,
-      ),
+                        // 词云组件
+                        WordCloud(
+                          sentences: sentences,
+                          onSentenceTap: _onSentenceTap,
+                        ),
 
-      // 分类标签
-      SizedBox(height: 12), // 添加间距
-            Container(
-              height: 32, // 分类标签的高度
-              child: ListView(
-                scrollDirection: Axis.horizontal, // 水平滚动
-                children: [
-                  SizedBox(width: 4), // 左侧留白
-                  ..._buildCategoryTabs(), // 生成分类标签
-                  SizedBox(width: 4), // 右侧留白
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+                        // 分类标签和刷新按钮
+                        SizedBox(height: 12), // 添加间距
+                        Container(
+                          height: 32, // 分类标签的高度
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ListView(
+                                  scrollDirection: Axis.horizontal, // 水平滚动
+                                  children: [
+                                    SizedBox(width: 4), // 左侧留白
+                                    ...categories.map((category) {
+                                      return Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 4),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            // 处理分类标签点击事件
+                                            print('点击了分类: ${category.label}');
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                            decoration: BoxDecoration(
+                                              color: category.color, // 使用分类的颜色
+                                              borderRadius: BorderRadius.circular(20), // 圆角
+                                            ),
+                                            alignment: Alignment.center, // 文字水平居中
+                                            child: Text(
+                                              category.label,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ],
+                                ),
+                              ),
+                              // 分类刷新按钮
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 4),
+                                child: GestureDetector(
+                                  onTap: _refreshCategories,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[800], // 刷新按钮的颜色
+                                      borderRadius: BorderRadius.circular(20), // 圆角
+                                    ),
+                                    alignment: Alignment.center, // 文字水平居中
+                                    child: Icon(
+                                      Icons.refresh,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 SizedBox(height: 4),
                 GestureDetector(
                   onTap: _showInputSection,
-            child: TextField(
-  controller: _controller,
-  focusNode: _focusNode,
-  enabled: _isInputVisible,
-  style: TextStyle(color: Colors.white, fontSize: 11),
-  maxLines: 5, // 设置为多行输入框
-  minLines: 2, // 最小显示 3 行
-  decoration: InputDecoration(
-    hintText: '记录一下',
-    hintStyle: TextStyle(color: Colors.grey[500]),
-    filled: true,
-    fillColor: Colors.grey[900],
-    border: OutlineInputBorder(
-      borderSide: BorderSide.none,
-      borderRadius: BorderRadius.circular(12),
-    ),
-    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12), // 调整内边距
-  ),
-),
+                  child: TextField(
+                    controller: _controller,
+                    focusNode: _focusNode,
+                    enabled: _isInputVisible,
+                    style: TextStyle(color: Colors.white, fontSize: 11),
+                    maxLines: 5, // 设置为多行输入框
+                    minLines: 2, // 最小显示 3 行
+                    decoration: InputDecoration(
+                      hintText: '记录一下',
+                      hintStyle: TextStyle(color: Colors.grey[500]),
+                      filled: true,
+                      fillColor: Colors.grey[900],
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12), // 调整内边距
+                    ),
+                  ),
                 ),
                 if (_isInputVisible)
                   SlideTransition(
