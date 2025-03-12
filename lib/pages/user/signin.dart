@@ -87,7 +87,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     style: Theme.of(context)
                         .textTheme
                         .headlineSmall!
-                        .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
+                        .copyWith(fontWeight: FontWeight.bold, color: Colors.white,fontSize: 20),
                   ),
                   SizedBox(height: constraints.maxHeight * 0.05),
                   Form(
@@ -95,14 +95,14 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: Column(
                       children: [
                         TextFormField(
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white,fontSize: 12),
                           decoration: InputDecoration(
                             hintText: '用户名',
                             hintStyle: TextStyle(color: Colors.grey[500]),
                             filled: true,
                             fillColor: Colors.grey[900], // 深灰色填充
                             contentPadding: EdgeInsets.symmetric(
-                                horizontal: 24.0, vertical: 16.0),
+                                horizontal: 16.0, vertical: 12.0),
                             border: OutlineInputBorder(
                               borderSide: BorderSide.none,
                               borderRadius:
@@ -117,14 +117,14 @@ class _SignInScreenState extends State<SignInScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
                           child: TextFormField(
                             obscureText: true,
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.white,fontSize: 12),
                             decoration: InputDecoration(
                               hintText: '密码',
                               hintStyle: TextStyle(color: Colors.grey[500]),
                               filled: true,
                               fillColor: Colors.grey[900], // 深灰色填充
                               contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 24.0, vertical: 16.0),
+                                  horizontal: 16.0, vertical: 12.0),
                               border: OutlineInputBorder(
                                 borderSide: BorderSide.none,
                                 borderRadius:

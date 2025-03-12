@@ -11,6 +11,9 @@ import '/common/provider.dart';
 import 'package:clover/views/topBar.dart';
 import 'package:clover/pages/common/intro.dart'; // 引导页
 import 'package:get/get.dart';
+import 'package:clover/pages/home/health/health.dart';
+import 'package:clover/pages/home/mood/mood.dart';
+import 'package:clover/pages/home/luck/luck.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -22,9 +25,9 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _pages = [
     TodayContent(),
-    Text('123'),
-    Text('123'),
-    Text('123'),
+    HealthPage(),
+    MoodPage(),
+    LuckPage(),
     // ProfilePage(),
   ];
 
@@ -85,20 +88,20 @@ class _HomePageState extends State<HomePage> {
         unselectedIconTheme: const IconThemeData(size: 24.0),
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.edit_calendar),
-            label: '记录今天',
+            icon: Icon(Icons.edit_note),
+            label: '今日记录',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month),
-            label: '回忆过去',
+            icon: Icon(Icons.health_and_safety),
+            label: '健康管理',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.widgets),
-            label: '更多工具',
+            icon: Icon(Icons.sentiment_satisfied),
+            label: '心情日记',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: '设置',
+            icon: Icon(Icons.auto_graph),
+            label: '运势分析',
           ),
           // BottomNavigationBarItem(
           //   icon: Icon(Icons.person),

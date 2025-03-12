@@ -21,7 +21,7 @@ final String _baseUrl = kReleaseMode
     // : 'https://localhost:4321/api'; // 开发环境地址 本地
     // : 'https://172.20.10.10:4321/api'; // 开发环境地址 本地
     // : 'https://192.168.31.61:4321/api'; // 开发环境地址 wifi
-        : 'https://192.168.31.61:4321/api'; 
+    : 'https://192.168.31.61:4321/api';
 // : 'https://1s.design:4321/api'; // 开发环境地址
 
 BaseOptions options = BaseOptions(
@@ -83,18 +83,19 @@ class DioHttp {
             // TDToast.showText('用户身份过期，请重新登录', context: context);
           }
 
-           Get.offAndToNamed('/signin');
+          Get.offAndToNamed('/signin');
         }
 
         if (response?.data['code'] == 500) {
-          return handler.reject( DioException(
-        requestOptions: response.requestOptions,
-        response: response,
-        type: DioExceptionType.badResponse,
-        error: '服务器内部错误',
-      ),);
+          return handler.reject(
+            DioException(
+              requestOptions: response.requestOptions,
+              response: response,
+              type: DioExceptionType.badResponse,
+              error: '服务器内部错误',
+            ),
+          );
         }
-        
 
         return handler.next(response); // 继续后续操作
       },
@@ -118,24 +119,22 @@ class DioHttp {
           Get.offAndToNamed('/signin');
         }
 
-        return handler
-        .next(error); // 继续抛出错误
+        return handler.next(error); // 继续抛出错误
       },
     ));
 
     // 配置 HttpClientAdapter 以忽略 SSL 证书验证
 
-      if (kIsWeb) {
-        } else {
-    // 在移动端禁用证书验证
-          (_dio.httpClientAdapter as dynamic).onHttpClientCreate = (client) {
-            client.badCertificateCallback =
-                (X509Certificate cert, String host, int port) {
-              return true; // 忽略证书验证
-            };
-    };
-  }
-
+    if (kIsWeb) {
+    } else {
+      // 在移动端禁用证书验证
+      (_dio.httpClientAdapter as dynamic).onHttpClientCreate = (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true; // 忽略证书验证
+        };
+      };
+    }
   }
 
   // GET 请求

@@ -6,7 +6,7 @@ class HealthPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text('健康管理'),
+        title: Text('健康管理',style: TextStyle(fontSize: 13),),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         elevation: 0,

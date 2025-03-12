@@ -51,7 +51,9 @@ class TodayContent extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () async {
-                  var dayRecord = Provider.of<AppDataProvider>(context, listen: false).getData('dayrecord');
+                  var dayRecord =
+                      Provider.of<AppDataProvider>(context, listen: false)
+                          .getData('dayrecord');
                   var pid = dayRecord['id'];
 
                   Map<String, dynamic> postData = {
@@ -62,7 +64,8 @@ class TodayContent extends StatelessWidget {
                     await deleteDayrecordDetail(postData);
                     // 检查组件是否仍然挂载
                     if (context.mounted) {
-                      await Provider.of<AppDataProvider>(context, listen: false).fetchDayRecord();
+                      await Provider.of<AppDataProvider>(context, listen: false)
+                          .fetchDayRecord();
                       TDToast.showText('记录已删除', context: context);
                       Navigator.of(context).pop(); // 关闭对话框
                     }
@@ -88,152 +91,119 @@ class TodayContent extends StatelessWidget {
   }
 
   void _showRecordDetails(BuildContext context, Map<String, dynamic> record) {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true, // 允许高度根据内容扩展
-    backgroundColor: Colors.transparent, // 背景透明
-    builder: (BuildContext context) {
-      return Container(
-        height: MediaQuery.of(context).size.height * 0.75, // 弹层高度为屏幕高度的 75%
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.black87, Colors.black54], // 渐变背景
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // 允许高度根据内容扩展
+      backgroundColor: Colors.transparent, // 背景透明
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.75, // 弹层高度为屏幕高度的 75%
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.black87, Colors.black54], // 渐变背景
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), // 顶部圆角
+              topRight: Radius.circular(20),
+            ),
           ),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20), // 顶部圆角
-            topRight: Radius.circular(20),
-          ),
-        ),
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16), // 内边距
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // 拖动条
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Colors.grey[700], // 拖动条颜色
-                  borderRadius: BorderRadius.circular(2), // 圆角
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16), // 内边距
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // 拖动条
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[700], // 拖动条颜色
+                    borderRadius: BorderRadius.circular(2), // 圆角
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 20), // 间距
-            // 记录详情标题
-            Text(
-              '记录详情',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 20), // 间距
-            // 记录内容
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 时间
-                    Text(
-                      '时间: ${record['createTime'] ?? '未知时间'}',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white70,
-                      ),
-                    ),
-                    SizedBox(height: 12), // 间距
-                    // 内容
-                    Text(
-                      '内容: ${record['content'] ?? '无内容'}',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white70,
-                      ),
-                    ),
-                    SizedBox(height: 12), // 间距
-                    // 根据类型显示额外信息
-                    if (record['type'] == 'sleep')
-                      Text(
-                        '睡眠质量: ${record['quality'] ?? '未知'}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white70,
-                        ),
-                      ),
-                    if (record['type'] == 'mood')
-                      Text(
-                        '心情指数: ${record['moodLevel'] ?? '未知'}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white70,
-                        ),
-                      ),
-                    if (record['type'] == 'diet')
-                      Text(
-                        '饮食情况: ${record['mealDetails'] ?? '未知'}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white70,
-                        ),
-                      ),
-                    if (record['type'] == 'exercise')
-                      Text(
-                        '运动时长: ${record['duration'] ?? '未知'}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white70,
-                        ),
-                      ),
-                    if (record['type'] == 'fragment')
-                      Text(
-                        '碎片: ${record['duration'] ?? '未知'}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white70,
-                        ),
-                      ),
-                  ],
+              SizedBox(height: 20), // 间距
+              // 记录详情标题
+              Text(
+                '记录详情',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-            SizedBox(height: 12), // 间距
-            // 操作按钮
-  // 操作按钮
-Padding(
-  padding: EdgeInsets.symmetric(horizontal: 4), // 左右留出 20 的间距
-  child: SizedBox(
-    width: double.infinity, // 宽度占满
-    child: ElevatedButton(
-      onPressed: () => Navigator.pop(context), // 关闭弹层
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.redAccent, // 按钮背景色
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12), // 圆角
-        ),
-        padding: EdgeInsets.symmetric(vertical: 14), // 内边距
-      ),
-      child: Text(
-        '关闭',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-        ),
-      ),
-    ),
-  ),
-),
-          ],
-        ),
-      );
-    },
-  );
-}
-
+              SizedBox(height: 20), // 间距
+              // 记录内容
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 时间
+                      Text(
+                        '时间: ${record['createTime'] ?? '未知时间'}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white70,
+                        ),
+                      ),
+                      SizedBox(height: 12), // 间距
+                      // 内容
+                      Text(
+                        '内容: ${record['content'] ?? '无内容'}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white70,
+                        ),
+                      ),
+                      SizedBox(height: 12), // 间距
+                      Text(
+                        '${record}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white70,
+                        ),
+                      ),
+                      SizedBox(height: 12), // 间距
+                      // 根据类型显示额外信息
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 12), // 间距
+              // 操作按钮
+              // 操作按钮
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4), // 左右留出 20 的间距
+                child: SizedBox(
+                  width: double.infinity, // 宽度占满
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context), // 关闭弹层
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent, // 按钮背景色
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // 圆角
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 8), // 内边距
+                    ),
+                    child: Text(
+                      '关闭',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -329,11 +299,15 @@ Padding(
                       List<Map<String, dynamic>> records = [];
 
                       if (dayRecord['record'] != null) {
-                        records = List<Map<String, dynamic>>.from(dayRecord['record']).reversed.toList();
+                        records =
+                            List<Map<String, dynamic>>.from(dayRecord['record'])
+                                .reversed
+                                .toList();
                       }
 
                       return ListView(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 16.0),
                         children: [
                           if (records.isEmpty)
                             Container(
@@ -367,8 +341,10 @@ Padding(
                                 // 格式化时间
                                 String formattedTime = '未知时间';
                                 if (record['createTime'] != null) {
-                                  DateTime dateTime = DateTime.parse(record['createTime']);
-                                  formattedTime = DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
+                                  DateTime dateTime =
+                                      DateTime.parse(record['createTime']);
+                                  formattedTime = DateFormat('yyyy-MM-dd HH:mm')
+                                      .format(dateTime);
                                 }
 
                                 Widget customContent;
@@ -428,7 +404,8 @@ Padding(
                                   },
                                   child: Container(
                                     margin: EdgeInsets.only(bottom: 6), // 缩小间距
-                                    padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12), // 缩小内边距
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 6, horizontal: 12), // 缩小内边距
                                     decoration: BoxDecoration(
                                       color: Color(0xFF1A1A1A),
                                       borderRadius: BorderRadius.circular(12),
@@ -441,11 +418,13 @@ Padding(
                                       ],
                                     ),
                                     child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Expanded(
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 formattedTime,
@@ -459,7 +438,8 @@ Padding(
                                                 record['content'] ?? '无内容',
                                                 style: TextStyle(
                                                   fontSize: 14,
-                                                  color: Color(0xFFFFFFFF), // 内容文字为白色
+                                                  color: Color(
+                                                      0xFFFFFFFF), // 内容文字为白色
                                                 ),
                                               ),
                                               SizedBox(height: 4), // 缩小间距
@@ -468,10 +448,13 @@ Padding(
                                           ),
                                         ),
                                         IconButton(
-                                          icon: Icon(Icons.delete, color: Color(0x66ff0000)), // 删除按钮颜色改为浅灰色
+                                          icon: Icon(Icons.delete,
+                                              color: Color(
+                                                  0x66ff0000)), // 删除按钮颜色改为浅灰色
                                           iconSize: 20, // 缩小图标大小
                                           onPressed: () {
-                                            _deleteRecord(context, record['id']);
+                                            _deleteRecord(
+                                                context, record['id']);
                                           },
                                         ),
                                       ],
