@@ -50,16 +50,13 @@ class InputBottomSheet extends StatefulWidget {
   _InputBottomSheetState createState() => _InputBottomSheetState();
 }
 
+
+
 class _InputBottomSheetState extends State<InputBottomSheet> {
   final TextEditingController _controller = TextEditingController();
   bool _isLoading = false;
 
   List<String> sentences = [
-    "今天心情很好",
-    "工作有点累",
-    "学习新知识很有趣",
-    "和朋友一起吃饭",
-    "天气真不错",
   ];
 
   List<Category> categories = [
@@ -87,6 +84,13 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
     Category(
         label: '工作', color: Color.fromARGB(128, 105, 105, 105)), // 暗灰色（任务、工作）
   ];
+
+ @override
+  void initState() {
+    super.initState();
+    _refreshWordCloud(); // 在 initState 里调用请求方法
+  }
+
 
   void _refreshWordCloud() {
     setState(() {
