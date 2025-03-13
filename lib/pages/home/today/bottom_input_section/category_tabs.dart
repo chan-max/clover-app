@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 class Category {
   final String label;
   final Color color;
-
   Category({required this.label, required this.color});
 }
 
 class CategoryTabs extends StatelessWidget {
   final List<Category> categories;
-  final VoidCallback onRefresh;
+  final  onRefresh;
+  final void Function(String categoryName) onCategoryClick;
 
-  CategoryTabs({required this.categories, required this.onRefresh});
+  CategoryTabs({required this.categories, required this.onRefresh, required this.onCategoryClick});
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +27,7 @@ class CategoryTabs extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 4),
                   child: GestureDetector(
                     onTap: () {
+                      onRefresh(category.label);
                       print('点击了分类: ${category.label}');
                     },
                     child: Container(
@@ -51,25 +52,25 @@ class CategoryTabs extends StatelessWidget {
             ],
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 4),
-          child: GestureDetector(
-            onTap: onRefresh,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              decoration: BoxDecoration(
-                color: Colors.grey[800],
-                borderRadius: BorderRadius.circular(20),
-              ),
-              alignment: Alignment.center,
-              child: Icon(
-                Icons.refresh,
-                color: Colors.white,
-                size: 16,
-              ),
-            ),
-          ),
-        ),
+        // Padding(
+        //   padding: EdgeInsets.symmetric(horizontal: 4),
+        //   child: GestureDetector(
+        //     onTap: onRefresh,
+        //     child: Container(
+        //       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        //       decoration: BoxDecoration(
+        //         color: Colors.grey[800],
+        //         borderRadius: BorderRadius.circular(20),
+        //       ),
+        //       alignment: Alignment.center,
+        //       child: Icon(
+        //         Icons.refresh,
+        //         color: Colors.white,
+        //         size: 16,
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

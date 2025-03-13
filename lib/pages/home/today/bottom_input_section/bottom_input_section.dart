@@ -1,5 +1,6 @@
 import 'package:clover/common/api.dart';
 import 'package:clover/common/provider.dart';
+import 'package:clover/pages/common/recordPromptTutorial.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -9,10 +10,10 @@ import 'category_tabs.dart';
 class BottomInputSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+      child: SizedBox(
+        width: double.infinity, // 让按钮宽度占满
         child: ElevatedButton(
           onPressed: () => _showInputSection(context),
           style: ElevatedButton.styleFrom(
@@ -21,7 +22,7 @@ class BottomInputSection extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            padding: EdgeInsets.symmetric(vertical: 12), // 水平方向已由 `SizedBox` 控制
           ),
           child: Text(
             "添加记录",
@@ -62,9 +63,29 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
   ];
 
   List<Category> categories = [
-    Category(label: '生活', color: Color.fromARGB(128, 0, 0, 255)),
-    Category(label: '工作', color: Color.fromARGB(128, 0, 128, 0)),
-    Category(label: '学习', color: Color.fromARGB(128, 255, 165, 0)),
+    Category(
+        label: '碎片', color: Color.fromARGB(128, 169, 169, 169)), // 深灰色（零碎记录）
+    Category(
+        label: '心情', color: Color.fromARGB(128, 255, 105, 180)), // 热粉色（情绪记录）
+    Category(label: '状态', color: Color.fromARGB(128, 255, 165, 0)), // 橙色（身体状态）
+    Category(
+        label: '运气', color: Color.fromARGB(128, 0, 191, 255)), // 深天蓝（幸运、随机事件）
+    Category(label: '睡眠', color: Color.fromARGB(128, 75, 0, 130)), // 靛蓝色（安静、夜晚）
+    Category(label: '饮食', color: Color.fromARGB(128, 0, 128, 0)), // 绿色（健康饮食）
+    Category(
+        label: '运动', color: Color.fromARGB(128, 220, 20, 60)), // 猩红色（活力、运动）
+    Category(
+        label: '事件', color: Color.fromARGB(128, 70, 130, 180)), // 钢蓝色（重要事情）
+    Category(
+        label: '学习', color: Color.fromARGB(128, 30, 144, 255)), // 道奇蓝（学习、思考）
+    Category(label: '健康', color: Color.fromARGB(128, 255, 69, 0)), // 橙红色（健康管理）
+    Category(
+        label: '旅行', color: Color.fromARGB(128, 46, 139, 87)), // 海洋绿（旅行、出行）
+    Category(label: '购物', color: Color.fromARGB(128, 186, 85, 211)), // 紫罗兰红（消费）
+    Category(
+        label: '娱乐', color: Color.fromARGB(128, 255, 140, 0)), // 暗橙色（电影、游戏）
+    Category(
+        label: '工作', color: Color.fromARGB(128, 105, 105, 105)), // 暗灰色（任务、工作）
   ];
 
   void _refreshWordCloud() {
@@ -79,11 +100,12 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
 
   void _refreshCategories() {
     setState(() {
-      categories = [
-        Category(label: '新分类1', color: Color.fromARGB(128, 0, 0, 255)),
-        Category(label: '新分类2', color: Color.fromARGB(128, 128, 0, 128)),
-      ]..shuffle();
+      categories = []..shuffle();
     });
+  }
+
+  _onCategoryClick(categoryName) {
+    // 根据分类名去查询相关prompt
   }
 
   void _addRecord() async {
@@ -147,12 +169,12 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.refresh, color: Colors.white),
-                    onPressed: _refreshWordCloud,
-                  ),
-                  IconButton(
                     icon: Icon(Icons.close, color: Colors.white),
                     onPressed: () => Navigator.of(context).pop(),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.refresh, color: Colors.white),
+                    onPressed: _refreshWordCloud,
                   ),
                 ],
               ),
@@ -166,6 +188,7 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
               Container(
                 height: 32,
                 child: CategoryTabs(
+                  onCategoryClick: _onCategoryClick,
                   categories: categories,
                   onRefresh: _refreshCategories,
                 ),
@@ -185,7 +208,8 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
               ),
               SizedBox(height: 12),
@@ -195,12 +219,38 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
                   children: [
                     SizedBox(width: 4),
                     Expanded(
-                      child: Text(
-                        '每次记录消耗一枚时光币',
-                        style: TextStyle(
-                          color: Colors.grey[500],
-                          fontSize: 10,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      RecordPromptTutorial(), // 目标页面
+                                ),
+                              );
+                            },
+                            child: Text(
+                              '如何编写高效记录提示词？',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 12, // 链接文字更大
+                                fontWeight: FontWeight.w500,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 4), // 间距
+                          Text(
+                            '每次记录消耗一枚时光币',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 10, // 说明文字略小
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(
