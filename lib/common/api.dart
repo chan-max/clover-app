@@ -299,6 +299,8 @@ Future<dynamic> getMyHeightRecords() async {
   } catch (e) {}
 }
 
+
+
 Future<dynamic> getDayrecordLatest(count) async {
   dynamic url = '/dayrecord/latest/$count';
   try {
@@ -307,4 +309,12 @@ Future<dynamic> getDayrecordLatest(count) async {
     );
     return response['data'];
   } catch (e) {}
+}
+
+
+// 获取记录相似提示词
+dynamic getRecordSimilarWords({ prompt,count}) async {
+  String url = '/ai/similar-record-words';
+  var res = await dioHttp.get(url,queryParameters: {'prompt':prompt,'count':count});
+  return res['data'];
 }

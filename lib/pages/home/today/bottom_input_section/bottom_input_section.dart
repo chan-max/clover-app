@@ -7,6 +7,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'word_cloud.dart';
 import 'category_tabs.dart';
 import 'dart:math' as math;
+import 'dart:convert';
 
 class BottomInputSection extends StatelessWidget {
   @override
@@ -89,36 +90,34 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
     _refreshWordCloud(); // 在 initState 里调用请求方法
   }
 
-  void _refreshWordCloud() {
+  void _refreshWordCloud() async {
+    var res = await getRecordSimilarWords(count: 1, prompt: 'l');
+
     setState(() {
-   sentences = [
-        Sentence(sentence: "累了", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
-        Sentence(sentence: "很开心", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
-        Sentence(sentence: "我感到很困", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
-        Sentence(sentence: "今天心情不错，天气也不错", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
-        Sentence(sentence: "忙碌的一天", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
-        Sentence(sentence: "累了", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
-        Sentence(sentence: "很开心", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
-        Sentence(sentence: "我感到很困", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
-        Sentence(sentence: "今天心情不错，天气也不错", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
-        Sentence(sentence: "忙碌的一天", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
-        Sentence(sentence: "累了", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
-        Sentence(sentence: "很开心", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
-        Sentence(sentence: "我感到很困", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
-        Sentence(sentence: "今天心情不错，天气也不错", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
-        Sentence(sentence: "忙碌的一天", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
+      // return sentences = res;
+
+      sentences = [
+        ...res.map<Sentence>((e) {
+          return Sentence(
+            sentence: e['sentence'],
+            fontSize: e['fontSize'], // 12 ~ 28 之间的随机数
+          );
+        }).toList()
       ]..shuffle();
+
     });
   }
 
-  void _refreshCategories() {
+  void _refreshCategories(tag) {
     setState(() {
       categories = []..shuffle();
     });
   }
 
   _onCategoryClick(categoryName) {
-    // 根据分类名去查询相关prompt
+    // 更新相关词云
+    print('分类点击');
+     _refreshWordCloud(); 
   }
 
   void _addRecord() async {

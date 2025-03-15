@@ -10,7 +10,7 @@ class Sentence {
 }
 
 class WordCloud extends StatelessWidget {
-  final List<Sentence> sentences;
+  final List<dynamic> sentences;
   final Function(String) onSentenceTap;
 
   const WordCloud({required this.sentences, required this.onSentenceTap});
@@ -24,7 +24,7 @@ class WordCloud extends StatelessWidget {
         runSpacing: 8.0,
         children: sentences.asMap().entries.map((entry) {
           int index = entry.key;
-          Sentence sentence = entry.value;
+          dynamic sentence = entry.value;
 
           return AnimatedWordItem(
             key: ValueKey('$index-${sentence.sentence}'), // 方案1: 结合索引和文本

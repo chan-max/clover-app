@@ -8,75 +8,62 @@ class Category {
 
 class CategoryTabs extends StatelessWidget {
   final List<Category> categories;
-  final  onRefresh;
+  final void Function(String categoryName) onRefresh;
   final void Function(String categoryName) onCategoryClick;
 
-  CategoryTabs({required this.categories, required this.onRefresh, required this.onCategoryClick});
+  const CategoryTabs({
+    super.key,
+    required this.categories,
+    required this.onRefresh,
+    required this.onCategoryClick,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              SizedBox(width: 4),
-              ...categories.map((category) {
-             return Padding(
-  padding: EdgeInsets.symmetric(horizontal: 4),
-  child: Material(
-    color: Colors.transparent,
-    child: InkWell(
-      borderRadius: BorderRadius.circular(20),
-      onTap: () {
-        onRefresh(category.label);
-        print('点击了分类: ${category.label}');
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: category.color,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          category.label,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
+    return SizedBox(
+      height: 40, // 确保 InkWell 能正确点击
+      child: Row(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  const SizedBox(width: 4),
+                  ...categories.map((category) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: GestureDetector(
+                        onTap: () {
+                          debugPrint('点击了分类: ${category.label}');
+                          // onRefresh(category.label);
+                          onCategoryClick(category.label); // 确保这个方法被正确调用
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: category.color,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            category.label,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
-    ),
-  ),
-);
-
-              }).toList(),
-            ],
-          ),
-        ),
-        // Padding(
-        //   padding: EdgeInsets.symmetric(horizontal: 4),
-        //   child: GestureDetector(
-        //     onTap: onRefresh,
-        //     child: Container(
-        //       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-        //       decoration: BoxDecoration(
-        //         color: Colors.grey[800],
-        //         borderRadius: BorderRadius.circular(20),
-        //       ),
-        //       alignment: Alignment.center,
-        //       child: Icon(
-        //         Icons.refresh,
-        //         color: Colors.white,
-        //         size: 16,
-        //       ),
-        //     ),
-        //   ),
-        // ),
-      ],
     );
   }
 }
