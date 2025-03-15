@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'package:uuid/uuid.dart'; // 方案2 需要
+
+class Sentence {
+  final String sentence;
+  final double fontSize;
+
+  Sentence({required this.sentence, required this.fontSize});
+}
 
 class WordCloud extends StatelessWidget {
-  final List<String> sentences;
+  final List<Sentence> sentences;
   final Function(String) onSentenceTap;
 
-  WordCloud({required this.sentences, required this.onSentenceTap});
+  const WordCloud({required this.sentences, required this.onSentenceTap});
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +22,15 @@ class WordCloud extends StatelessWidget {
         alignment: WrapAlignment.center,
         spacing: 8.0,
         runSpacing: 8.0,
-        children: sentences.map((sentence) {
+        children: sentences.asMap().entries.map((entry) {
+          int index = entry.key;
+          Sentence sentence = entry.value;
+
           return AnimatedWordItem(
-            sentence: sentence,
-            onTap: () => onSentenceTap(sentence),
+            key: ValueKey('$index-${sentence.sentence}'), // 方案1: 结合索引和文本
+            sentence: sentence.sentence,
+            fontSize: sentence.fontSize,
+            onTap: () => onSentenceTap(sentence.sentence),
           );
         }).toList(),
       ),
@@ -27,9 +40,15 @@ class WordCloud extends StatelessWidget {
 
 class AnimatedWordItem extends StatefulWidget {
   final String sentence;
+  final double fontSize;
   final VoidCallback onTap;
 
-  const AnimatedWordItem({required this.sentence, required this.onTap});
+  const AnimatedWordItem({
+    Key? key,
+    required this.sentence,
+    required this.fontSize,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   _AnimatedWordItemState createState() => _AnimatedWordItemState();
@@ -44,27 +63,50 @@ class _AnimatedWordItemState extends State<AnimatedWordItem>
   @override
   void initState() {
     super.initState();
+    _initializeAnimations();
+    _startAnimationWithDelay();
+  }
+
+  @override
+  void didUpdateWidget(covariant AnimatedWordItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.sentence != oldWidget.sentence) {
+      _restartAnimation();
+    }
+  }
+
+  void _initializeAnimations() {
     _controller = AnimationController(
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       vsync: this,
     );
+
     _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
         curve: Curves.easeInOut,
       ),
     );
-    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+
+    _scaleAnimation = Tween<double>(begin: 0.7, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
         curve: Curves.easeInOut,
       ),
     );
-    Future.delayed(Duration(milliseconds: (500 * math.Random().nextDouble()).toInt()), () {
+  }
+
+  void _startAnimationWithDelay() {
+    Future.delayed(Duration(milliseconds: (300 * math.Random().nextDouble()).toInt()), () {
       if (mounted) {
         _controller.forward();
       }
     });
+  }
+
+  void _restartAnimation() {
+    _controller.reset();
+    _startAnimationWithDelay();
   }
 
   @override
@@ -73,10 +115,17 @@ class _AnimatedWordItemState extends State<AnimatedWordItem>
     super.dispose();
   }
 
+  void _onTap() {
+    _controller.reverse().then((_) {
+      _controller.forward();
+    });
+    widget.onTap();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.onTap,
+      onTap: _onTap,
       child: AnimatedBuilder(
         animation: _controller,
         builder: (context, child) {
@@ -84,11 +133,13 @@ class _AnimatedWordItemState extends State<AnimatedWordItem>
             opacity: _opacityAnimation.value,
             child: Transform.scale(
               scale: _scaleAnimation.value,
-              child: child,
+              child: _SentenceItem(
+                sentence: widget.sentence,
+                fontSize: widget.fontSize,
+              ),
             ),
           );
         },
-        child: _SentenceItem(sentence: widget.sentence),
       ),
     );
   }
@@ -96,8 +147,12 @@ class _AnimatedWordItemState extends State<AnimatedWordItem>
 
 class _SentenceItem extends StatelessWidget {
   final String sentence;
+  final double fontSize;
 
-  const _SentenceItem({required this.sentence});
+  const _SentenceItem({
+    required this.sentence,
+    required this.fontSize,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +166,7 @@ class _SentenceItem extends StatelessWidget {
         sentence,
         style: TextStyle(
           color: Colors.white,
-          fontSize: 12.0,
+          fontSize: fontSize,
           fontWeight: FontWeight.bold,
         ),
       ),

@@ -21,7 +21,8 @@ final String _baseUrl = kReleaseMode
     // : 'https://localhost:4321/api'; // 开发环境地址 本地
     // : 'https://172.20.10.10:4321/api'; // 开发环境地址 本地
     // : 'https://192.168.31.61:4321/api'; // 开发环境地址 wifi
-    : 'https://192.168.31.61:4321/api';
+    // : 'https://192.168.31.61:4321/api';
+        : 'https://192.168.0.104:4321/api';
 // : 'https://1s.design:4321/api'; // 开发环境地址
 
 BaseOptions options = BaseOptions(

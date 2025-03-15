@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'word_cloud.dart';
 import 'category_tabs.dart';
+import 'dart:math' as math;
 
 class BottomInputSection extends StatelessWidget {
   @override
@@ -50,14 +51,11 @@ class InputBottomSheet extends StatefulWidget {
   _InputBottomSheetState createState() => _InputBottomSheetState();
 }
 
-
-
 class _InputBottomSheetState extends State<InputBottomSheet> {
   final TextEditingController _controller = TextEditingController();
   bool _isLoading = false;
 
-  List<String> sentences = [
-  ];
+  List<Sentence> sentences = [];
 
   List<Category> categories = [
     Category(
@@ -85,19 +83,30 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
         label: '工作', color: Color.fromARGB(128, 105, 105, 105)), // 暗灰色（任务、工作）
   ];
 
- @override
+  @override
   void initState() {
     super.initState();
     _refreshWordCloud(); // 在 initState 里调用请求方法
   }
 
-
   void _refreshWordCloud() {
     setState(() {
-      sentences = [
-        "新的句子1",
-        "新的句子2",
-        "新的句子3",
+   sentences = [
+        Sentence(sentence: "累了", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
+        Sentence(sentence: "很开心", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
+        Sentence(sentence: "我感到很困", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
+        Sentence(sentence: "今天心情不错，天气也不错", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
+        Sentence(sentence: "忙碌的一天", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
+        Sentence(sentence: "累了", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
+        Sentence(sentence: "很开心", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
+        Sentence(sentence: "我感到很困", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
+        Sentence(sentence: "今天心情不错，天气也不错", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
+        Sentence(sentence: "忙碌的一天", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
+        Sentence(sentence: "累了", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
+        Sentence(sentence: "很开心", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
+        Sentence(sentence: "我感到很困", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
+        Sentence(sentence: "今天心情不错，天气也不错", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
+        Sentence(sentence: "忙碌的一天", fontSize: 12.0 + math.Random().nextDouble() * 16.0),
       ]..shuffle();
     });
   }
@@ -165,7 +174,7 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
       ),
       child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
