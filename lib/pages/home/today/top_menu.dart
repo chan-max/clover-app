@@ -1,4 +1,7 @@
+import 'package:clover/pages/home/today/yestoday/yestoday.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:clover/common/notification.dart';
 
 class TopMenu extends StatelessWidget {
   final VoidCallback onButton1Pressed;
@@ -17,7 +20,7 @@ class TopMenu extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       decoration: BoxDecoration(
-        color: Color(0xFF1A1A1A),
+        color: Color(0xFF000000),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -31,7 +34,9 @@ class TopMenu extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           ElevatedButton(
-            onPressed: onButton1Pressed,
+            onPressed: () {
+              Get.to(YestodayAnalyzePage());
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFF00F5E1),
               foregroundColor: Colors.black,
@@ -40,10 +45,30 @@ class TopMenu extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: Text('页面1'),
+            child: Text('昨日分析'),
           ),
           ElevatedButton(
-            onPressed: onButton2Pressed,
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text("通知"),
+                  content: Text("这是一个内部通知"),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text("关闭"),
+                    ),
+                  ],
+                ),
+              );
+
+              NotificationService().showNotification(
+                id: 1,
+                title: "提醒",
+                body: "你的任务需要完成啦！",
+              );
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFF00F5E1),
               foregroundColor: Colors.black,

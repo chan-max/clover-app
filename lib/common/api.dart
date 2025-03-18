@@ -15,8 +15,9 @@ import 'package:flutter/foundation.dart';
 // 定义一个全局的 NavigatorKey
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-const bool kReleaseMode = bool.fromEnvironment('dart.vm.product') ?? true;
-final String _baseUrl = kReleaseMode
+const bool productionMode = bool.fromEnvironment('dart.vm.product') ?? true;
+
+final String _baseUrl = productionMode
     ? 'https://1s.design:4321/api' // 生产环境地址 线上
     // : 'https://localhost:4321/api'; // 开发环境地址 本地
     // : 'https://172.20.10.10:4321/api'; // 开发环境地址 本地
@@ -40,7 +41,7 @@ class DioHttp {
   DioHttp() {
     _dio.options.baseUrl = _baseUrl;
 
-    if (kReleaseMode) {
+    if (productionMode) {
       print("现在是生产环境: $_baseUrl");
     } else {
       print("现在是开发环境: $_baseUrl");
@@ -299,8 +300,6 @@ Future<dynamic> getMyHeightRecords() async {
   } catch (e) {}
 }
 
-
-
 Future<dynamic> getDayrecordLatest(count) async {
   dynamic url = '/dayrecord/latest/$count';
   try {
@@ -318,3 +317,5 @@ dynamic getRecordSimilarWords({ prompt,count}) async {
   var res = await dioHttp.get(url,queryParameters: {'prompt':prompt,'count':count});
   return res['data'];
 }
+
+

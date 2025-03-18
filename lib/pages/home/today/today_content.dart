@@ -222,20 +222,20 @@ class TodayContent extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // 功能区
-          // TopMenu(
-          //   onButton1Pressed: () {
-          //     // 跳转到页面1
-          //     Navigator.pushNamed(context, '/page1');
-          //   },
-          //   onButton2Pressed: () {
-          //     // 跳转到页面2
-          //     Navigator.pushNamed(context, '/page2');
-          //   },
-          //   onButton3Pressed: () {
-          //     // 跳转到页面3
-          //     Navigator.pushNamed(context, '/page3');
-          //   },
-          // ),
+          TopMenu(
+            onButton1Pressed: () {
+              // 跳转到页面1
+              Navigator.pushNamed(context, '/page1');
+            },
+            onButton2Pressed: () {
+              // 跳转到页面2
+              Navigator.pushNamed(context, '/page2');
+            },
+            onButton3Pressed: () {
+              // 跳转到页面3
+              Navigator.pushNamed(context, '/page3');
+            },
+          ),
           SizedBox(height: 16), // 添加间距
           Expanded(
             child: Stack(

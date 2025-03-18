@@ -1,3 +1,4 @@
+import 'package:clover/common/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // 用于本地存储
 import './pages/user/signin.dart'; // 导入登录页面
@@ -13,6 +14,7 @@ void main() async {
   // 检查是否存在 token
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('token');
+   await NotificationService().init();
   runApp(
     ChangeNotifierProvider(
       create: (context) => AppDataProvider(),
@@ -20,7 +22,6 @@ void main() async {
     ),
   ); // 根据 token 是否存在跳转页面
 }
-
 
 class MyApp extends StatelessWidget {
   final bool isLoggedIn; // 是否已登录
