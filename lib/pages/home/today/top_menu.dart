@@ -49,25 +49,27 @@ class TopMenu extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: Text("通知"),
-                  content: Text("这是一个内部通知"),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text("关闭"),
-                    ),
-                  ],
-                ),
-              );
+              // showDialog(
+              //   context: context,
+              //   builder: (context) => AlertDialog(
+              //     title: Text("通知"),
+              //     content: Text("这是一个内部通知"),
+              //     actions: [
+              //       TextButton(
+              //         onPressed: () => Navigator.pop(context),
+              //         child: Text("关闭"),
+              //       ),
+              //     ],
+              //   ),
+              // );
 
-              NotificationService().showNotification(
-                id: 1,
-                title: "提醒",
-                body: "你的任务需要完成啦！",
-              );
+                print('发送通知');
+                 NotificationService().showNotification(
+                  id: 0,
+                  title: '即时通知',
+                  body: '这是一个即时通知',
+                  payload: '{"type": "instant", "data": "test123"}',
+                );
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFF00F5E1),

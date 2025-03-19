@@ -10,17 +10,27 @@ import 'package:get/get.dart';
 import 'package:clover/common/router_get.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // 确保初始化完成
-  // 检查是否存在 token
+  WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('token');
-   await NotificationService().init();
+
+  // 在 main 中初始化 NotificationService
+  await NotificationService().init(
+    onNotificationClicked: (response) {
+      print('Notification clicked with payload: ${response.payload}');
+    },
+  );
+
+  print('app run');
+
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => AppDataProvider(),
-      child: MyApp(isLoggedIn: token != null),
+    NotificationWrapper(
+      child: ChangeNotifierProvider(
+        create: (context) => AppDataProvider(),
+        child: MyApp(isLoggedIn: token != null),
+      ),
     ),
-  ); // 根据 token 是否存在跳转页面
+  );
 }
 
 class MyApp extends StatelessWidget {

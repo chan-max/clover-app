@@ -82,8 +82,8 @@ class _HomePageState extends State<HomePage> {
         },
         selectedItemColor: const Color(0xFFFFFFFF),
         unselectedItemColor: const Color(0xFF666666),
-        selectedFontSize: 10.0,
-        unselectedFontSize: 8.0,
+        selectedFontSize: 9.0,
+        unselectedFontSize: 7.0,
         selectedIconTheme: const IconThemeData(size: 28.0),
         unselectedIconTheme: const IconThemeData(size: 24.0),
         items: const [
