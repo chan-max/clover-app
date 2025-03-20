@@ -7,6 +7,7 @@ import '/common/api.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import './bottom_input_section/bottom_input_section.dart';
 import './top_menu.dart'; // 引入功能区组件
+import './calendar.dart';
 
 class TodayContent extends StatelessWidget {
   void _deleteRecord(BuildContext context, String recordId) {
@@ -221,21 +222,7 @@ class TodayContent extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // 功能区
-          TopMenu(
-            onButton1Pressed: () {
-              // 跳转到页面1
-              Navigator.pushNamed(context, '/page1');
-            },
-            onButton2Pressed: () {
-              // 跳转到页面2
-              Navigator.pushNamed(context, '/page2');
-            },
-            onButton3Pressed: () {
-              // 跳转到页面3
-              Navigator.pushNamed(context, '/page3');
-            },
-          ),
+          CustomMonthCalendar(),
           SizedBox(height: 16), // 添加间距
           Expanded(
             child: Stack(
