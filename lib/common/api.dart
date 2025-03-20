@@ -17,34 +17,39 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 const bool productionMode = bool.fromEnvironment('dart.vm.product') ?? true;
 
-final String _baseUrl = productionMode
-    ? 'https://1s.design:4321/api' // 生产环境地址 线上
+
+final BASE_HOST = productionMode
+    ? '1s.design:4321' 
+    : '192.168.31.61:4321';
+
+final String BASE_URL = productionMode
+    ? 'https://$BASE_HOST/api' // 生产环境地址 线上
     // : 'https://localhost:4321/api'; // 开发环境地址 本地
     // : 'https://172.20.10.10:4321/api'; // 开发环境地址 本地
-    : 'https://192.168.31.61:4321/api'; // 开发环境地址 wifi
+    : 'https://$BASE_HOST/api'; // 开发环境地址 wifi
     // : 'https://192.168.31.61:4321/api';
         // : 'https://192.168.0.104:4321/api';
 // : 'https://1s.design:4321/api'; // 开发环境地址
 
 BaseOptions options = BaseOptions(
-  baseUrl: _baseUrl,
+  baseUrl: BASE_URL,
   connectTimeout: Duration(milliseconds: 50000), // 连接超时时间
   receiveTimeout: Duration(milliseconds: 30000), // 接收超时时间
   contentType: 'application/json', // 请求体的内容类型
   responseType: ResponseType.json, // 期望的响应数据类型
   headers: {}, // 请求头
-);
+); 
 
 class DioHttp {
   final Dio _dio = Dio(options);
 
   DioHttp() {
-    _dio.options.baseUrl = _baseUrl;
+    _dio.options.baseUrl = BASE_URL;
 
     if (productionMode) {
-      print("现在是生产环境: $_baseUrl");
+      print("现在是生产环境: $BASE_URL");
     } else {
-      print("现在是开发环境: $_baseUrl");
+      print("现在是开发环境: $BASE_URL");
     }
 
     // 添加请求前拦截器

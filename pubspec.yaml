@@ -41,6 +41,8 @@ dependencies:
   get: ^4.7.2
   flutter_markdown: ^0.7.6+2
   flutter_client_sse: ^2.0.3
+  web_socket_channel: ^3.0.2
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
