@@ -17,18 +17,15 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 const bool productionMode = bool.fromEnvironment('dart.vm.product') ?? true;
 
-
-final BASE_HOST = productionMode
-    ? '1s.design:4321' 
-    : '192.168.31.61:4321';
+final BASE_HOST = productionMode ? '1s.design:4321' : '192.168.31.61:4321';
 
 final String BASE_URL = productionMode
     ? 'https://$BASE_HOST/api' // 生产环境地址 线上
     // : 'https://localhost:4321/api'; // 开发环境地址 本地
     // : 'https://172.20.10.10:4321/api'; // 开发环境地址 本地
     : 'https://$BASE_HOST/api'; // 开发环境地址 wifi
-    // : 'https://192.168.31.61:4321/api';
-        // : 'https://192.168.0.104:4321/api';
+// : 'https://192.168.31.61:4321/api';
+// : 'https://192.168.0.104:4321/api';
 // : 'https://1s.design:4321/api'; // 开发环境地址
 
 BaseOptions options = BaseOptions(
@@ -38,7 +35,7 @@ BaseOptions options = BaseOptions(
   contentType: 'application/json', // 请求体的内容类型
   responseType: ResponseType.json, // 期望的响应数据类型
   headers: {}, // 请求头
-); 
+);
 
 class DioHttp {
   final Dio _dio = Dio(options);
@@ -315,12 +312,21 @@ Future<dynamic> getDayrecordLatest(count) async {
   } catch (e) {}
 }
 
-
 // 获取记录相似提示词
-dynamic getRecordSimilarWords({ prompt,count}) async {
+dynamic getRecordSimilarWords({prompt, count}) async {
   String url = '/ai/similar-record-words';
-  var res = await dioHttp.get(url,queryParameters: {'prompt':prompt,'count':count});
+  var res = await dioHttp
+      .get(url, queryParameters: {'prompt': prompt, 'count': count});
   return res['data'];
 }
 
-
+/**
+ * 获取当前月份记录条数
+*/
+// 获取记录相似提示词
+dynamic getMonthlyRecordCount({year, month}) async {
+  String url = '/dayrecord/monthly-record-count';
+  var res =
+      await dioHttp.get(url, queryParameters: {'year': year, 'month': month});
+  return res['data'];
+}
