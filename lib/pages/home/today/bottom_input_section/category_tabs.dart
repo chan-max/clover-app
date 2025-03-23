@@ -21,7 +21,7 @@ class CategoryTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40, // 确保 InkWell 能正确点击
+      height: 35, // 调整高度使每个元素更小
       child: Row(
         children: [
           Expanded(
@@ -33,14 +33,15 @@ class CategoryTabs extends StatelessWidget {
                   ...categories.map((category) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: GestureDetector(
+                      child: InkWell(
                         onTap: () {
                           debugPrint('点击了分类: ${category.label}');
-                          // onRefresh(category.label);
-                          onCategoryClick(category.label); // 确保这个方法被正确调用
+                          onCategoryClick(category.label); // 调用点击事件
                         },
+                        splashColor: Colors.white.withOpacity(0.4), // 点击时的涟漪效果
+                        highlightColor: Colors.white.withOpacity(0.2), // 点击时的高亮效果
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4), // 调整内边距
                           decoration: BoxDecoration(
                             color: category.color,
                             borderRadius: BorderRadius.circular(20),
@@ -50,7 +51,7 @@ class CategoryTabs extends StatelessWidget {
                             category.label,
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 14,
+                              fontSize: 12, // 减小文字大小
                               fontWeight: FontWeight.bold,
                             ),
                           ),

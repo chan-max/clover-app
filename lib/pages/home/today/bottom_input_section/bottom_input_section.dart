@@ -100,7 +100,7 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
         ...res.map<Sentence>((e) {
           return Sentence(
             sentence: e['content'],
-            fontSize: 12 + Random().nextInt(17)
+            fontSize: 8 + Random().nextInt(13) + Random().nextDouble()
           );
         }).toList()
       ]..shuffle();

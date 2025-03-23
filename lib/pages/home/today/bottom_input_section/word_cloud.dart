@@ -1,11 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import 'package:uuid/uuid.dart'; // 方案2 需要
 
 class Sentence {
   final String sentence;
-  final int fontSize;
+  final dynamic fontSize;
 
   Sentence({required this.sentence, required this.fontSize});
 }
@@ -21,16 +19,16 @@ class WordCloud extends StatelessWidget {
     return Center(
       child: Wrap(
         alignment: WrapAlignment.center,
-        spacing: 8.0,
-        runSpacing: 8.0,
+        spacing: 6.0, // 缩小间距
+        runSpacing: 6.0, // 缩小行间距
         children: sentences.asMap().entries.map((entry) {
           int index = entry.key;
           dynamic sentence = entry.value;
 
           return AnimatedWordItem(
-            key: ValueKey('$index-${sentence.sentence}'), // 方案1: 结合索引和文本
+            key: ValueKey('$index-${sentence.sentence}'),
             sentence: sentence.sentence,
-            fontSize: sentence.fontSize,
+            fontSize: sentence.fontSize * 0.8, // 调小字体大小
             onTap: () => onSentenceTap(sentence.sentence),
           );
         }).toList(),
@@ -60,12 +58,14 @@ class _AnimatedWordItemState extends State<AnimatedWordItem>
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
   late Animation<double> _scaleAnimation;
+  late Color _randomColor;
 
   @override
   void initState() {
     super.initState();
     _initializeAnimations();
     _startAnimationWithDelay();
+    _randomColor = _getRandomColor(); // 获取随机颜色
   }
 
   @override
@@ -110,6 +110,16 @@ class _AnimatedWordItemState extends State<AnimatedWordItem>
     _startAnimationWithDelay();
   }
 
+  Color _getRandomColor() {
+    dynamic rand = math.Random();
+    return Color.fromRGBO(
+      rand.nextInt(256), // 随机红色
+      rand.nextInt(256), // 随机绿色
+      rand.nextInt(256), // 随机蓝色
+      1.0,
+    );
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -137,6 +147,7 @@ class _AnimatedWordItemState extends State<AnimatedWordItem>
               child: _SentenceItem(
                 sentence: widget.sentence,
                 fontSize: widget.fontSize,
+                color: _randomColor, // 设置随机颜色
               ),
             ),
           );
@@ -149,19 +160,32 @@ class _AnimatedWordItemState extends State<AnimatedWordItem>
 class _SentenceItem extends StatelessWidget {
   final String sentence;
   final double fontSize;
+  final Color color;
 
   const _SentenceItem({
     required this.sentence,
     required this.fontSize,
+    required this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0), // 调整内边距
       decoration: BoxDecoration(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(8.0),
+        color: color.withOpacity(0.2), // 气泡的背景色增加透明度
+        borderRadius: BorderRadius.circular(25.0), // 圆角形状，模拟气泡
+        border: Border.all(
+          color: color.withOpacity(0.4), // 边框颜色增加透明度
+          width: 1.5, // 边框宽度
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.15), // 阴影颜色的透明度
+            blurRadius: 6,
+            offset: Offset(2, 2), // 阴影偏移量
+          ),
+        ],
       ),
       child: Text(
         sentence,
