@@ -322,6 +322,15 @@ dynamic getRecordSimilarWords({prompt, count}) async {
   return res['data'];
 }
 
+
+// 搜索记录相关句子
+dynamic searchRecordSentence({query, limit}) async {
+  String url = '/record-sentence/search';
+  var res = await dioHttp
+      .get(url, queryParameters: {'query': query, 'limit': limit});
+  return res['data'];
+}
+
 /**
  * 获取当前月份记录条数
 */

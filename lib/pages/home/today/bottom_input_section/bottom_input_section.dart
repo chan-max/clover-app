@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'word_cloud.dart';
 import 'category_tabs.dart';
-import 'dart:math' as math;
+import 'dart:math';
 import 'dart:convert';
 
 class BottomInputSection extends StatelessWidget {
@@ -91,16 +91,16 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
   }
 
   void _refreshWordCloud({category}) async {
-    var res = await getRecordSimilarWords(count: 1, prompt: category,);
-  
+    var res = await searchRecordSentence(limit: 20, query: category,);
+
     setState(() {
       // return sentences = res;
 
       sentences = [
         ...res.map<Sentence>((e) {
           return Sentence(
-            sentence: e['sentence'],
-            fontSize: e['fontSize'], // 12 ~ 28 之间的随机数
+            sentence: e['content'],
+            fontSize: 12 + Random().nextInt(17)
           );
         }).toList()
       ]..shuffle();
