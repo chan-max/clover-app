@@ -87,12 +87,12 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
   @override
   void initState() {
     super.initState();
-    _refreshWordCloud(); // 在 initState 里调用请求方法
+    _refreshWordCloud(category: currentCategory); // 在 initState 里调用请求方法
   }
 
-  void _refreshWordCloud() async {
-    var res = await getRecordSimilarWords(count: 1, prompt: 'l');
-
+  void _refreshWordCloud({category}) async {
+    var res = await getRecordSimilarWords(count: 1, prompt: category,);
+  
     setState(() {
       // return sentences = res;
 
@@ -104,7 +104,6 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
           );
         }).toList()
       ]..shuffle();
-
     });
   }
 
@@ -114,10 +113,13 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
     });
   }
 
+  var currentCategory = '随机';
+
   _onCategoryClick(categoryName) {
     // 更新相关词云
-    print('分类点击');
-     _refreshWordCloud(); 
+    currentCategory = categoryName;
+    print('分类点击$categoryName');
+    _refreshWordCloud(category:currentCategory);
   }
 
   void _addRecord() async {
@@ -138,6 +140,7 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
     var params = {
       'content': inputText,
       'type': 'prompt',
+      'category': currentCategory,
     };
 
     try {
@@ -186,7 +189,9 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
                   ),
                   IconButton(
                     icon: Icon(Icons.refresh, color: Colors.white),
-                    onPressed: _refreshWordCloud,
+                    onPressed: () => {
+                      _refreshWordCloud(category: currentCategory)
+                    },
                   ),
                 ],
               ),

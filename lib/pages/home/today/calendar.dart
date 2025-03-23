@@ -1,9 +1,16 @@
+
+import 'package:tdesign_flutter/tdesign_flutter.dart' show TDToast; 
+
 import 'package:clover/common/api.dart';
+import 'package:clover/pages/home/today/dayrecorddetail/dayrecorddetail.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'dart:async';
 import 'dart:math';
+
+
 
 class CustomMonthCalendar extends StatefulWidget {
   const CustomMonthCalendar({super.key});
@@ -141,6 +148,30 @@ class _CustomMonthCalendarState extends State<CustomMonthCalendar> {
                 focusedDay: _focusedDay,
                 selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
                 onDaySelected: (selectedDay, focusedDay) {
+                  DateTime now = DateTime.now(); // 当前时间
+
+                  // 只比较年月日
+                  DateTime today = DateTime(now.year, now.month, now.day);
+                  DateTime targetDay =
+                      DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
+
+
+                  if (today.isAfter(targetDay)) {
+                    print("当前日期大于目标日期");
+                  } else if (today.isBefore(targetDay)) {
+                      // 说明再未来
+                    TDToast.showText('这天还没到,专注眼前吧', context: context);
+                  } else {
+                    print("两个日期相等");
+                  }
+
+                  // Get.toNamed('/dayRecordDetailPage', parameters: {
+                  //   'dateKey': selectedDay.year.toString() +
+                  //       '-' +
+                  //       selectedDay.month.toString() +
+                  //       '-' +
+                  //       selectedDay.day.toString()
+                  // });
                   setState(() {
                     _selectedDay = selectedDay;
                     _focusedDay = focusedDay;

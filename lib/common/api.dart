@@ -17,7 +17,9 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 const bool productionMode = bool.fromEnvironment('dart.vm.product') ?? true;
 
-final BASE_HOST = productionMode ? '1s.design:4321' : '192.168.31.61:4321';
+final BASE_HOST = productionMode ? '1s.design:4321' : 
+'192.168.31.61:4321';
+// '172.20.10.10:4321';
 
 final String BASE_URL = productionMode
     ? 'https://$BASE_HOST/api' // 生产环境地址 线上
