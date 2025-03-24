@@ -91,6 +91,7 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
   }
 
   void _refreshWordCloud({category}) async {
+    print(category);
     var res = await searchRecordSentence(limit: 20, query: category,);
 
     setState(() {
