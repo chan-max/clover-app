@@ -114,7 +114,7 @@ class _InputBottomSheetState extends State<InputBottomSheet> {
     });
   }
 
-  var currentCategory = '随机';
+  var currentCategory = '';
 
   _onCategoryClick(categoryName) {
     // 更新相关词云

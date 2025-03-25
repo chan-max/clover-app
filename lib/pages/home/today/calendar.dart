@@ -1,5 +1,7 @@
+import 'dart:convert';
+import 'dart:developer';
 
-import 'package:tdesign_flutter/tdesign_flutter.dart' show TDToast; 
+import 'package:tdesign_flutter/tdesign_flutter.dart' show TDToast;
 
 import 'package:clover/common/api.dart';
 import 'package:clover/pages/home/today/dayrecorddetail/dayrecorddetail.dart';
@@ -9,8 +11,6 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'dart:async';
 import 'dart:math';
-
-
 
 class CustomMonthCalendar extends StatefulWidget {
   const CustomMonthCalendar({super.key});
@@ -25,41 +25,27 @@ class _CustomMonthCalendarState extends State<CustomMonthCalendar> {
   CalendarFormat _calendarFormat = CalendarFormat.week;
   bool _isCalendarVisible = true;
 
-  Map<String, Map<String, dynamic>> weatherData = {};
+  dynamic recordData = {};
 
   @override
   void initState() {
     super.initState();
     initializeDateFormatting('zh_CN');
-    _fetchWeatherData(_focusedDay);
+    _fetchData(_focusedDay);
   }
 
   /// 模拟从后台接口获取天气数据
-  Future<void> _fetchWeatherData(DateTime month) async {
-    Map<String, Map<String, dynamic>> fakeWeather = {};
-    Random random = Random();
-
-    await getMonthlyRecordCount(year: month.year, month: month.month);
-
-    for (int i = 1; i <= 31; i++) {
-      DateTime day = DateTime(month.year, month.month, i);
-      if (day.month != month.month) break;
-
-      String dayKey = _formatDateKey(day); // 确保 key 格式一致
-      fakeWeather[dayKey] = {
-        'temperature': '${random.nextInt(15) + 10}°C',
-        'icon': random.nextBool() ? Icons.wb_sunny : Icons.cloud
-      };
-    }
-
+  Future<void> _fetchData(DateTime month) async {
+    var res = await getMonthlyRecordCount(year: month.year, month: month.month);
+    print(res);
     setState(() {
-      weatherData = fakeWeather;
+      recordData = (res);
     });
   }
 
   /// 统一格式化日期，保证 key 统一
   String _formatDateKey(DateTime date) {
-    return '${date.year}-${date.month}-${date.day}';
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 
   void _toggleCalendarFormat() {
@@ -68,7 +54,7 @@ class _CustomMonthCalendarState extends State<CustomMonthCalendar> {
           ? CalendarFormat.week
           : CalendarFormat.month;
     });
-    _fetchWeatherData(_focusedDay);
+    _fetchData(_focusedDay);
   }
 
   void _toggleCalendarVisibility() {
@@ -82,13 +68,14 @@ class _CustomMonthCalendarState extends State<CustomMonthCalendar> {
       _focusedDay = DateTime.now();
       _selectedDay = DateTime.now();
     });
-    _fetchWeatherData(_focusedDay);
+    _fetchData(_focusedDay);
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       decoration: BoxDecoration(
         color: Colors.black,
         borderRadius: BorderRadius.circular(12),
@@ -152,26 +139,25 @@ class _CustomMonthCalendarState extends State<CustomMonthCalendar> {
 
                   // 只比较年月日
                   DateTime today = DateTime(now.year, now.month, now.day);
-                  DateTime targetDay =
-                      DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
-
+                  DateTime targetDay = DateTime(
+                      selectedDay.year, selectedDay.month, selectedDay.day);
 
                   if (today.isAfter(targetDay)) {
                     print("当前日期大于目标日期");
+                    Get.toNamed('/dayRecordDetailPage', parameters: {
+                      'dateKey': selectedDay.year.toString() +
+                          '-' +
+                          selectedDay.month.toString() +
+                          '-' +
+                          selectedDay.day.toString()
+                    });
                   } else if (today.isBefore(targetDay)) {
-                      // 说明再未来
+                    // 说明再未来
                     TDToast.showText('这天还没到,专注眼前吧', context: context);
                   } else {
                     print("两个日期相等");
                   }
 
-                  // Get.toNamed('/dayRecordDetailPage', parameters: {
-                  //   'dateKey': selectedDay.year.toString() +
-                  //       '-' +
-                  //       selectedDay.month.toString() +
-                  //       '-' +
-                  //       selectedDay.day.toString()
-                  // });
                   setState(() {
                     _selectedDay = selectedDay;
                     _focusedDay = focusedDay;
@@ -181,7 +167,7 @@ class _CustomMonthCalendarState extends State<CustomMonthCalendar> {
                   setState(() {
                     _focusedDay = focusedDay;
                   });
-                  _fetchWeatherData(focusedDay);
+                  _fetchData(focusedDay);
                 },
                 calendarFormat: _calendarFormat,
                 headerStyle: const HeaderStyle(
@@ -225,15 +211,18 @@ class _CustomMonthCalendarState extends State<CustomMonthCalendar> {
                   ),
                   outsideDaysVisible: false,
                 ),
-                rowHeight: 60,
+                rowHeight: 48,
                 daysOfWeekHeight: 30,
                 calendarBuilders: CalendarBuilders(
                   defaultBuilder: (context, day, focusedDay) {
                     String dayKey = _formatDateKey(day);
-                    bool hasWeather = weatherData.containsKey(dayKey);
 
+                    bool hasRecord = recordData.containsKey(dayKey);
+
+                    String count = recordData[dayKey]?.toString() ?? ''; // 获取对应的值
+              
                     return Container(
-                      margin: const EdgeInsets.all(2),
+                      margin: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
                         color: Colors.grey[900],
@@ -248,15 +237,12 @@ class _CustomMonthCalendarState extends State<CustomMonthCalendar> {
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),
-                          if (hasWeather) ...[
-                            Icon(weatherData[dayKey]!['icon'],
-                                color: Colors.greenAccent, size: 16),
-                            Text(
-                              weatherData[dayKey]!['temperature'],
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 12),
-                            ),
-                          ],
+                          if(count.isNotEmpty)
+                          Text(
+                            count,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 12),
+                          ),
                         ],
                       ),
                     );

@@ -64,6 +64,8 @@ class DioHttp {
         // 如果 token 存在，将其添加到请求头中
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
+        }else{
+          print('缺少请求token');
         }
 
         return handler.next(options); // 继续请求
