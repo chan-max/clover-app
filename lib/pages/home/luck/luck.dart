@@ -82,6 +82,7 @@ class LuckPickerDialog extends StatefulWidget {
 
 class _LuckPickerDialogState extends State<LuckPickerDialog> {
   int selectedLuck = 5; // 默认中间值
+  TextEditingController infoController = TextEditingController(); // 输入框控制器
 
   final List<Map<String, dynamic>> luckData = List.generate(
     11, // 0-10，共11项
@@ -90,11 +91,14 @@ class _LuckPickerDialogState extends State<LuckPickerDialog> {
       if (index <= 2) {
         color = Color.lerp(Color(0xFFD32F2F), Color(0xFFFF5722), index / 2)!;
       } else if (index <= 5) {
-        color = Color.lerp(Color(0xFFFF5722), Color(0xFFFFCA28), (index - 2) / 3)!;
+        color =
+            Color.lerp(Color(0xFFFF5722), Color(0xFFFFCA28), (index - 2) / 3)!;
       } else if (index <= 8) {
-        color = Color.lerp(Color(0xFFFFCA28), Color(0xFF81C784), (index - 5) / 3)!;
+        color =
+            Color.lerp(Color(0xFFFFCA28), Color(0xFF81C784), (index - 5) / 3)!;
       } else {
-        color = Color.lerp(Color(0xFF81C784), Color(0xFF4CAF50), (index - 8) / 2)!;
+        color =
+            Color.lerp(Color(0xFF81C784), Color(0xFF4CAF50), (index - 8) / 2)!;
       }
       return {
         'luckValue': index,
@@ -144,7 +148,8 @@ class _LuckPickerDialogState extends State<LuckPickerDialog> {
                       onHorizontalDragUpdate: (details) {
                         setState(() {
                           double sensitivity = 0.05;
-                          selectedLuck -= (details.delta.dx * sensitivity).round();
+                          selectedLuck -=
+                              (details.delta.dx * sensitivity).round();
                           selectedLuck = selectedLuck.clamp(0, 10);
                         });
                       },
@@ -156,6 +161,27 @@ class _LuckPickerDialogState extends State<LuckPickerDialog> {
                             fontSize: 48,
                             fontWeight: FontWeight.bold,
                           ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // 输入框，供用户输入相关信息
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextField(
+                      controller: infoController,
+                      style: TextStyle(color: Colors.white),
+                      cursorColor: Colors.white, // 设置光标颜色为白色
+                      decoration: InputDecoration(
+                        filled: true,
+
+                        fillColor: Colors.transparent, // 设置背景为透明
+                        hintText: '请输入与运气相关的备注...',
+                        hintStyle: TextStyle(color: Colors.white70),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none, // 去掉边框
                         ),
                       ),
                     ),
@@ -212,8 +238,9 @@ class _LuckPickerDialogState extends State<LuckPickerDialog> {
                 bottom: 20,
                 child: ElevatedButton(
                   onPressed: () {
-                    // 模拟发送数据到后台，打印当前选择的运气值
+                    // 模拟发送数据到后台，打印当前选择的运气值和输入的备注信息
                     print('选择的运气值: ${currentLuck['label']}');
+                    print('输入的备注: ${infoController.text}');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black.withOpacity(0.6), // 半透明背景
