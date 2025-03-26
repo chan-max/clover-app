@@ -237,12 +237,12 @@ class _CustomMonthCalendarState extends State<CustomMonthCalendar> {
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),
-                          if(count.isNotEmpty)
-                          Text(
-                            count,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 12),
-                          ),
+                          // if(count.isNotEmpty)
+                          // Text(
+                          //   count,
+                          //   style: const TextStyle(
+                          //       color: Colors.white, fontSize: 12),
+                          // ),
                         ],
                       ),
                     );

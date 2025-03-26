@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clover/components/chart/latest30mood.dart';
+import 'package:clover/components/chart/moodPie.dart';
 
 class MoodPage extends StatefulWidget {
   @override
@@ -20,7 +21,8 @@ class _MoodPageState extends State<MoodPage> {
   void _initializeMoodData() {
     DateTime today = DateTime.now();
     for (int i = 29; i >= 0; i--) {
-      String date = today.subtract(Duration(days: i)).toIso8601String().substring(0, 10);
+      String date =
+          today.subtract(Duration(days: i)).toIso8601String().substring(0, 10);
       moodData[date] = 5; // 默认心情值 5
     }
     setState(() {});
@@ -46,7 +48,8 @@ class _MoodPageState extends State<MoodPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('记录心情', style: TextStyle(color: Colors.white, fontSize: 14)),
+                      Text('记录心情',
+                          style: TextStyle(color: Colors.white, fontSize: 14)),
                       IconButton(
                         icon: Icon(Icons.close, color: Colors.white),
                         onPressed: () => Navigator.pop(context),
@@ -84,7 +87,8 @@ class _MoodPageState extends State<MoodPage> {
                       if (moodText.isNotEmpty) {
                         setState(() {
                           moodRecords.insert(0, moodText);
-                          String date = DateTime.now().toIso8601String().substring(0, 10);
+                          String date =
+                              DateTime.now().toIso8601String().substring(0, 10);
                           moodData[date] = moodValue;
                         });
                         Navigator.pop(context);
@@ -106,21 +110,48 @@ class _MoodPageState extends State<MoodPage> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text('心情日记', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        title: Text('心情日记',
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: MoodChart(),
-          ),
-          Expanded(
-            child: ListView.builder(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // 心情统计图表
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xff19181F),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: MoodChart(),
+              padding: EdgeInsets.all(12),
+              margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+            ),
+
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Color(0xff19181F),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Column(
+                children: [
+                  Text('关于我的心情统计',style: TextStyle(color: Colors.white,fontSize: 12)),
+                  MoodPie(),
+                ],
+              ),
+              padding: EdgeInsets.all(12),
+              margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+            ),
+
+            // 历史记录列表
+            ListView.builder(
               padding: EdgeInsets.all(16.0),
               itemCount: moodRecords.length,
+              shrinkWrap: true, // 让 `ListView` 适配 `Column`
+              physics: NeverScrollableScrollPhysics(), // 避免嵌套滚动冲突
               itemBuilder: (context, index) {
                 return Card(
                   color: Colors.grey[900],
@@ -134,8 +165,8 @@ class _MoodPageState extends State<MoodPage> {
                 );
               },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
