@@ -334,55 +334,13 @@ class TodayContent extends StatelessWidget {
                                       .format(dateTime);
                                 }
 
-                                Widget customContent;
-                                switch (record['type']) {
-                                  case 'sleep':
-                                    customContent = Text(
-                                      '睡眠质量: ${record['quality'] ?? '未知'}',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Color(0xFF888888),
-                                      ),
-                                    );
-                                    break;
-                                  case 'mood':
-                                    customContent = Text(
-                                      '心情指数: ${record['moodLevel'] ?? '未知'}',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Color(0xFF888888),
-                                      ),
-                                    );
-                                    break;
-                                  case 'diet':
-                                    customContent = Text(
-                                      '饮食情况: ${record['mealDetails'] ?? '未知'}',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Color(0xFF888888),
-                                      ),
-                                    );
-                                    break;
-                                  case 'exercise':
-                                    customContent = Text(
-                                      '运动时长: ${record['duration'] ?? '未知'}',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Color(0xFF888888),
-                                      ),
-                                    );
-                                    break;
-                                  case 'fragment':
-                                    customContent = Text(
-                                      '碎片: ${record['duration'] ?? '未知'}',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Color(0xFF888888),
-                                      ),
-                                    );
-                                    break;
-                                  default:
-                                    customContent = SizedBox();
+                                // 根据类型选择显示内容
+                                String displayContent = '无内容';
+                                if (record['type'] == 'prompt') {
+                                  displayContent = record['content'] ?? '无内容';
+                                } else if (record['type'] == 'luck') {
+                                  displayContent =
+                                      '运气值: ${record['luckValue'] ?? '未知'}';
                                 }
 
                                 return GestureDetector(
@@ -422,15 +380,13 @@ class TodayContent extends StatelessWidget {
                                               ),
                                               SizedBox(height: 4), // 缩小间距
                                               Text(
-                                                record['content'] ?? '无内容',
+                                                displayContent,
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                   color: Color(
                                                       0xFFFFFFFF), // 内容文字为白色
                                                 ),
                                               ),
-                                              SizedBox(height: 4), // 缩小间距
-                                              customContent,
                                             ],
                                           ),
                                         ),
