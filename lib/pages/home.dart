@@ -103,10 +103,10 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.auto_graph),
             label: '运势分析',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.person),
-          //   label: '个人中心',
-          // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: '个人中心',
+          ),
         ],
         selectedLabelStyle: const TextStyle(
           color: Color(0xFFFFFFFF),
